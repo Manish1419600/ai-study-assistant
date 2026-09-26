@@ -47,7 +47,7 @@ export function getInitialPrefs() {
   return {
     mode: 'light', // 'light' | 'dark'
     fontSize: 18,
-    accent: ACCENT_OPTIONS[0],
+    accent: ACCENT_OPTIONS[1], // Cyan accent matching localhost
     bg: LIGHT_BG_OPTIONS[0],
   };
 }
