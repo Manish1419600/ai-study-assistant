@@ -45,10 +45,10 @@ export function getInitialPrefs() {
     console.warn('Could not read saved appearance prefs:', err);
   }
   return {
-    mode: 'dark', // 'light' | 'dark'
+    mode: 'light', // 'light' | 'dark'
     fontSize: 18,
     accent: ACCENT_OPTIONS[0],
-    bg: DARK_BG_OPTIONS[0],
+    bg: LIGHT_BG_OPTIONS[0],
   };
 }
 

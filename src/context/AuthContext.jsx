@@ -5,8 +5,13 @@ import { io } from 'socket.io-client';
 const AuthContext = createContext();
 
 const rawBackend = import.meta.env.VITE_BACKEND_URL;
-export const SOCKET_URL = rawBackend ? rawBackend.replace(/\/api\/?$/, '') : `http://${window.location.hostname}:5000`;
-export const API_BASE_URL = rawBackend ? (rawBackend.endsWith('/api') ? rawBackend : `${rawBackend}/api`) : `http://${window.location.hostname}:5000/api`;
+export const SOCKET_URL = rawBackend 
+  ? rawBackend.replace(/\/api\/?$/, '') 
+  : `http://${window.location.hostname}:5000`;
+
+export const API_BASE_URL = rawBackend 
+  ? (rawBackend.endsWith('/api') ? rawBackend : `${rawBackend}/api`) 
+  : `http://${window.location.hostname}:5000/api`;
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => {
