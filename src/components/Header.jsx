@@ -79,9 +79,17 @@ export default function Header({ activeTab, setActiveTab, studyHours, onOpenAppe
               onClick={() => setActiveTab(item.id)}
               className={`px-3 xl:px-4.5 py-2 rounded-xl font-bold transition-all flex items-center gap-2 cursor-pointer text-xs xl:text-sm ${
                 isActive
-                  ? 'header-nav-tab active bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg shadow-purple-600/30'
+                  ? 'header-nav-tab active text-white shadow-lg'
                   : 'text-slate-300 hover:text-white hover:bg-slate-800/80'
               }`}
+              style={
+                isActive
+                  ? {
+                      background: 'linear-gradient(135deg, var(--accent-from, #06B6D4), var(--accent-to, #3B82F6))',
+                      boxShadow: '0 4px 14px var(--accent-ring, rgba(6, 182, 212, 0.35))',
+                    }
+                  : undefined
+              }
             >
               <Icon className="w-3.5 h-3.5 xl:w-4 xl:h-4" />
               <span>{item.label}</span>
