@@ -124,56 +124,56 @@ export default function PlannerTab({ studyHours, setStudyHours }) {
   const completionRate = tasks.length > 0 ? Math.round((completedCount / tasks.length) * 100) : 0;
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3.5 sm:py-6 space-y-3.5 sm:space-y-6 pb-20">
+    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-7 space-y-5 sm:space-y-7 pb-20">
       {/* Top Greeting & Streak Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-2.5 bg-slate-900/60 p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-800 shadow-md">
+      <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-900/60 p-4 sm:p-5 lg:p-6 rounded-2xl border border-slate-800 shadow-md">
         <div>
-          <h2 className="text-base sm:text-2xl font-bold text-white flex items-center gap-1.5 sm:gap-2">
+          <h2 className="text-lg sm:text-2xl font-bold text-white flex items-center gap-2">
             Hello, {user?.name || 'Student'} 👋
           </h2>
-          <p className="text-[11px] sm:text-sm text-slate-300 mt-0.5">
-            Cognitive state optimal • Ready for {user?.major || 'Academic Study'}
+          <p className="text-xs sm:text-sm text-slate-300 mt-1">
+            Cognitive state optimal • Workspace ready for {user?.major || 'Academic Study'}
           </p>
         </div>
-        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-emerald-300 text-xs sm:text-sm font-bold shadow-inner">
-          <Flame className="w-3.5 h-3.5 sm:w-4.5 sm:h-4.5 text-orange-400 fill-orange-400 animate-bounce" />
+        <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-emerald-300 text-xs sm:text-sm font-bold shadow-inner">
+          <Flame className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-orange-400 fill-orange-400 animate-bounce" />
           <span>Active Streak</span>
           <span className="text-orange-400">🔥</span>
         </div>
       </div>
 
       {/* Main Grid Layout */}
-      <div className="desktop-grid-planner space-y-4 sm:space-y-6 lg:space-y-0">
+      <div className="desktop-grid-planner space-y-6 lg:space-y-0">
         
         {/* Left Column: Schedule, Tasks & Pomodoro Timer */}
-        <div className="space-y-4 sm:space-y-6">
+        <div className="space-y-6">
           {/* Alert Notification Banner */}
-          <div className="glass-card p-3 sm:p-4 rounded-xl flex items-center justify-between border-slate-800 bg-[#0F1526]/90 shadow-md">
-            <div className="flex items-center gap-2.5 min-w-0">
-              <div className="p-2 sm:p-2.5 rounded-lg sm:rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 flex-shrink-0">
-                <Bell className="w-4 h-4 sm:w-5 sm:h-5" />
+          <div className="glass-card p-4 rounded-xl flex items-center justify-between border-slate-800 bg-[#0F1526]/90 shadow-md">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="p-2.5 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 flex-shrink-0">
+                <Bell className="w-5 h-5" />
               </div>
               <p className="text-xs sm:text-sm text-slate-200 truncate">
                 Next reminder: <span className="text-cyan-400 font-bold">{tasks.find(t => !t.completed)?.title || 'All tasks completed'}</span>
               </p>
             </div>
-            <button className="text-slate-400 hover:text-white text-xs sm:text-sm font-bold px-1.5 flex-shrink-0">•••</button>
+            <button className="text-slate-400 hover:text-white text-xs sm:text-sm font-bold px-2 flex-shrink-0">•••</button>
           </div>
 
           {/* Schedule Flow Selector */}
-          <div className="space-y-2.5 sm:space-y-3.5">
+          <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-[11px] sm:text-sm font-bold text-slate-300 tracking-wider uppercase">Schedule Flow</span>
-              <div className="flex items-center p-1 rounded-xl bg-slate-900 border border-slate-800 text-[11px] sm:text-xs font-bold">
+              <span className="text-xs sm:text-sm font-bold text-slate-300 tracking-wider uppercase">Schedule Flow</span>
+              <div className="flex items-center p-1 rounded-xl bg-slate-900 border border-slate-800 text-xs font-bold">
                 <button
                   onClick={() => setScheduleView('daily')}
-                  className={`px-3 sm:px-4 py-1 sm:py-1.5 rounded-lg transition-all ${scheduleView === 'daily' ? 'bg-purple-600 text-white shadow-md' : 'text-slate-400'}`}
+                  className={`px-3.5 sm:px-4 py-1.5 rounded-lg transition-all ${scheduleView === 'daily' ? 'bg-purple-600 text-white shadow-md' : 'text-slate-400'}`}
                 >
                   Daily View
                 </button>
                 <button
                   onClick={() => setScheduleView('weekly')}
-                  className={`px-3 sm:px-4 py-1 sm:py-1.5 rounded-lg transition-all ${scheduleView === 'weekly' ? 'bg-purple-600 text-white shadow-md' : 'text-slate-400'}`}
+                  className={`px-3.5 sm:px-4 py-1.5 rounded-lg transition-all ${scheduleView === 'weekly' ? 'bg-purple-600 text-white shadow-md' : 'text-slate-400'}`}
                 >
                   Weekly View
                 </button>
@@ -181,14 +181,14 @@ export default function PlannerTab({ studyHours, setStudyHours }) {
             </div>
 
             {/* Date Strip */}
-            <div className="grid grid-cols-7 gap-1 sm:gap-2 w-full">
+            <div className="grid grid-cols-7 gap-1.5 sm:gap-2.5 w-full">
               {dates.map((item, idx) => {
                 const isSelected = activeDate === item.num;
                 return (
                   <button
                     key={idx}
                     onClick={() => setActiveDate(item.num)}
-                    className={`flex flex-col items-center py-2 sm:py-3 px-0.5 sm:px-2 rounded-lg sm:rounded-xl border font-bold transition-all ${
+                    className={`flex flex-col items-center py-2.5 sm:py-3.5 px-1 sm:px-2 rounded-xl border font-bold transition-all ${
                       isSelected
                         ? 'bg-purple-600 border-purple-400 text-white shadow-lg shadow-purple-600/30'
                         : 'bg-slate-900/60 border-slate-800/80 text-slate-300 hover:bg-slate-800/50'
@@ -196,7 +196,7 @@ export default function PlannerTab({ studyHours, setStudyHours }) {
                   >
                     <span className="text-[10px] sm:text-xs opacity-80">{item.day}</span>
                     <span className="text-xs sm:text-base font-extrabold mt-0.5">{item.num}</span>
-                    {isSelected && <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-cyan-300 mt-1" />}
+                    {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-cyan-300 mt-1" />}
                   </button>
                 );
               })}
@@ -204,21 +204,21 @@ export default function PlannerTab({ studyHours, setStudyHours }) {
           </div>
 
           {/* Live Pomodoro Study Timer Widget */}
-          <div className="glass-card p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border-purple-500/30 bg-gradient-to-r from-purple-950/50 via-slate-900 to-indigo-950/50 flex items-center justify-between shadow-xl">
-            <div className="space-y-0.5 sm:space-y-1">
-              <span className="text-[11px] sm:text-xs font-bold text-purple-400 uppercase tracking-wider block flex items-center gap-1.5">
-                <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> Live Pomodoro Session
+          <div className="glass-card p-4 sm:p-6 rounded-2xl border-purple-500/30 bg-gradient-to-r from-purple-950/50 via-slate-900 to-indigo-950/50 flex items-center justify-between shadow-xl">
+            <div className="space-y-1">
+              <span className="text-xs font-bold text-purple-400 uppercase tracking-wider block flex items-center gap-1.5">
+                <Clock className="w-4 h-4" /> Live Pomodoro Session
               </span>
-              <div className="text-2xl sm:text-4xl font-mono font-black text-white tracking-widest py-0.5">
+              <div className="text-3xl sm:text-4xl font-mono font-black text-white tracking-widest py-1">
                 {formatTimer(timerSeconds)}
               </div>
-              <p className="text-[11px] sm:text-sm text-slate-300">Subject: <span className="text-cyan-300 font-bold">{timerSubject}</span></p>
+              <p className="text-xs sm:text-sm text-slate-300">Subject: <span className="text-cyan-300 font-bold">{timerSubject}</span></p>
             </div>
 
-            <div className="flex items-center gap-1.5 sm:gap-2.5 flex-shrink-0">
+            <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
               <button
                 onClick={() => setIsTimerRunning(!isTimerRunning)}
-                className={`p-2.5 sm:p-3.5 rounded-xl font-bold transition-all shadow-lg flex items-center justify-center ${
+                className={`p-3 sm:p-3.5 rounded-xl font-bold transition-all shadow-lg flex items-center justify-center ${
                   isTimerRunning
                     ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 hover:bg-amber-500/30'
                     : 'gradient-btn-purple text-white shadow-purple-600/30 hover:scale-105'
@@ -229,10 +229,10 @@ export default function PlannerTab({ studyHours, setStudyHours }) {
 
               <button
                 onClick={() => { setIsTimerRunning(false); setTimerSeconds(25 * 60); }}
-                className="p-2.5 sm:p-3.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 hover:text-white"
+                className="p-3 sm:p-3.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 hover:text-white"
                 title="Reset Timer"
               >
-                <RotateCcw className="w-4 h-4 sm:w-5 sm:h-5" />
+                <RotateCcw className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
               </button>
             </div>
           </div>
