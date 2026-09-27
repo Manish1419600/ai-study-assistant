@@ -5,13 +5,18 @@ import { io } from 'socket.io-client';
 const AuthContext = createContext();
 
 const rawBackend = import.meta.env.VITE_BACKEND_URL;
+// If running in Capacitor Native Android app, hostname is 'localhost', so route to host PC IP
+const defaultHost = (typeof window !== 'undefined' && window.location.hostname && window.location.hostname !== 'localhost')
+  ? window.location.hostname
+  : '10.184.50.108';
+
 export const SOCKET_URL = rawBackend 
   ? rawBackend.replace(/\/api\/?$/, '') 
-  : `http://${window.location.hostname}:5000`;
+  : `http://${defaultHost}:5000`;
 
 export const API_BASE_URL = rawBackend 
   ? (rawBackend.endsWith('/api') ? rawBackend : `${rawBackend}/api`) 
-  : `http://${window.location.hostname}:5000/api`;
+  : `http://${defaultHost}:5000/api`;
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => {
