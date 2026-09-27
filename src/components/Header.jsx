@@ -59,22 +59,22 @@ export default function Header({ activeTab, setActiveTab, studyHours, onOpenAppe
   ];
 
   return (
-    <header className="app-header sticky top-0 z-30 backdrop-blur-md px-3 sm:px-6 lg:px-10 py-2.5 sm:py-4 border-b flex items-center justify-between w-full shadow-md transition-colors">
+    <header className="app-header sticky top-0 z-30 backdrop-blur-md px-3 sm:px-6 lg:px-8 py-2 sm:py-2.5 border-b flex items-center justify-between w-full shadow-sm transition-colors">
 
       {/* ── Brand ── */}
-      <div className="flex items-center gap-2.5 sm:gap-3 flex-shrink-0">
-        <div className="w-8 h-8 sm:w-11 sm:h-11 rounded-lg sm:rounded-xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-cyan-400 p-[1.5px] flex items-center justify-center shadow-md flex-shrink-0">
+      <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+        <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-cyan-400 p-[1.5px] flex items-center justify-center shadow-md flex-shrink-0">
           <div className="w-full h-full bg-[#0E1322] rounded-[7px] sm:rounded-[9px] flex items-center justify-center">
             <Hexagon className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-400 fill-cyan-400/20" />
           </div>
         </div>
         <div className="flex flex-col">
-          <h1 className="text-sm sm:text-lg xl:text-xl font-bold tracking-tight leading-tight flex items-center gap-1.5 sm:gap-2">
+          <h1 className="text-sm sm:text-base xl:text-lg font-bold tracking-tight leading-tight flex items-center gap-1.5 sm:gap-2">
             StudyGenie AI
-            <span className="hidden sm:inline-block px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 text-[11px] font-bold whitespace-nowrap tracking-wide">
+            <span className="hidden sm:inline-block px-2 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 text-[10px] font-bold whitespace-nowrap tracking-wide">
               v1.0 Live
             </span>
-            <span className={`hidden md:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold border whitespace-nowrap ${
+            <span className={`hidden xl:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold border whitespace-nowrap ${
               isSocketConnected 
                 ? 'bg-emerald-950/80 border-emerald-500/40 text-emerald-300' 
                 : 'bg-amber-950/80 border-amber-500/40 text-amber-300'
@@ -83,14 +83,21 @@ export default function Header({ activeTab, setActiveTab, studyHours, onOpenAppe
               <span>{isSocketConnected ? 'Backend Live' : 'Connecting...'}</span>
             </span>
           </h1>
-          <p className="text-[11px] sm:text-xs xl:text-sm font-semibold text-cyan-400 tracking-wide mt-0.5">
+          <p className="text-[10px] sm:text-xs font-semibold text-cyan-400 tracking-wide mt-0.5">
             {getTabTitle()}
           </p>
         </div>
       </div>
 
       {/* ── PC Nav Bar (Desktop Only) ── */}
-      <div className="hidden lg:flex items-center gap-1 xl:gap-2 bg-slate-900/90 p-1.5 rounded-2xl border border-slate-800 shadow-inner flex-shrink-0">
+      <nav
+        aria-label="Main Navigation"
+        className="hidden lg:flex items-center gap-0.5 xl:gap-1 p-1 rounded-xl border flex-shrink-0 transition-colors"
+        style={{
+          backgroundColor: isLightMode ? '#F1F5F9' : 'rgba(15, 23, 42, 0.75)',
+          borderColor: isLightMode ? '#E2E8F0' : 'rgba(51, 65, 85, 0.6)'
+        }}
+      >
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = activeTab === item.id;
@@ -98,31 +105,37 @@ export default function Header({ activeTab, setActiveTab, studyHours, onOpenAppe
             <button
               key={item.id}
               onClick={() => setActiveTab(item.id)}
-              className={`px-3 xl:px-4.5 py-2 rounded-xl font-bold transition-all flex items-center gap-2 cursor-pointer text-xs xl:text-sm ${
+              className={`px-2.5 xl:px-3.5 py-1.5 rounded-lg font-semibold transition-all flex items-center gap-1.5 cursor-pointer text-xs xl:text-sm whitespace-nowrap select-none ${
                 isActive
-                  ? 'header-nav-tab active text-white shadow-lg'
-                  : 'text-slate-300 hover:text-white hover:bg-slate-800/80'
+                  ? 'text-white shadow-sm'
+                  : isLightMode
+                    ? 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/70'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-800/70'
               }`}
               style={
                 isActive
                   ? {
                       background: 'linear-gradient(135deg, var(--accent-from, #06B6D4), var(--accent-to, #3B82F6))',
-                      boxShadow: '0 4px 14px var(--accent-ring, rgba(6, 182, 212, 0.35))',
+                      boxShadow: '0 2px 8px var(--accent-ring, rgba(6, 182, 212, 0.35))',
                     }
                   : undefined
               }
             >
-              <Icon className="w-3.5 h-3.5 xl:w-4 xl:h-4" />
-              <span>{item.label}</span>
+              <Icon className="w-3.5 h-3.5 xl:w-4 xl:h-4 flex-shrink-0" />
+              <span className="whitespace-nowrap">{item.label}</span>
               {item.badge && (
-                <span className="px-1.5 py-0.5 rounded-full bg-cyan-400 text-slate-950 font-extrabold text-[10px]">
+                <span className={`px-1.5 py-0.5 rounded-full font-bold text-[9px] uppercase tracking-wider ${
+                  isActive
+                    ? 'bg-white/20 text-white'
+                    : 'bg-cyan-500/20 text-cyan-400'
+                }`}>
                   {item.badge}
                 </span>
               )}
             </button>
           );
         })}
-      </div>
+      </nav>
 
       {/* ── Right Controls (Ultra-Compact on Mobile) ── */}
       <div className="flex items-center gap-1.5 sm:gap-2.5 flex-shrink-0">
