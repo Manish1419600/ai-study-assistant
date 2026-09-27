@@ -34,7 +34,7 @@ function AppContent() {
   return (
     <PullToRefresh onRefresh={handleGlobalRefresh}>
       <div
-        className="app-container min-h-screen text-slate-100 flex flex-col font-sans"
+        className="app-container min-h-screen max-w-[100vw] overflow-x-hidden text-slate-100 flex flex-col font-sans"
         style={{ backgroundColor: 'var(--bg-primary, #070913)' }}
       >
         {/* Top Header */}
@@ -46,7 +46,7 @@ function AppContent() {
         />
 
         {/* Main Workspace */}
-        <main className="flex-1 overflow-y-auto pb-24 lg:pb-8">
+        <main className="flex-1 w-full max-w-full overflow-y-auto overflow-x-hidden pb-16 lg:pb-8">
           {activeTab === 'planner' && (
             <PlannerTab
               key={`planner-${refreshKey}`}

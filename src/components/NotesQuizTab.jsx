@@ -96,7 +96,7 @@ export default function NotesQuizTab({ onOpenQuiz }) {
   };
 
   return (
-    <div className="p-4 lg:p-8 space-y-6 pb-20 max-w-7xl mx-auto">
+    <div className="w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 space-y-4 sm:space-y-6 pb-20 lg:pb-8">
       {/* Top Banner */}
       <div className="glass-card p-4 lg:p-6 rounded-2xl border-purple-500/30 bg-gradient-to-r from-purple-950/50 via-slate-900 to-indigo-950/50 flex items-center justify-between">
         <div>

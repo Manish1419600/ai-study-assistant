@@ -5,10 +5,10 @@ import React, { useState, useEffect } from 'react';
 import { X, Type, Palette, Sun, Moon, RefreshCw, Check } from 'lucide-react';
 
 export const FONT_OPTIONS = [
-  { label: 'Small',  value: 15, desc: 'Compact' },
-  { label: 'Medium', value: 18, desc: 'Default' },
-  { label: 'Large',  value: 21, desc: 'Comfortable' },
-  { label: 'XLarge', value: 24, desc: 'Accessible' },
+  { label: 'Small',  value: 14, desc: 'Compact' },
+  { label: 'Medium', value: 16, desc: 'Standard' },
+  { label: 'Large',  value: 18, desc: 'Comfortable' },
+  { label: 'XLarge', value: 20, desc: 'Accessible' },
 ];
 
 export const ACCENT_OPTIONS = [
@@ -46,7 +46,7 @@ export function getInitialPrefs() {
   }
   return {
     mode: 'light', // 'light' | 'dark'
-    fontSize: 18,
+    fontSize: 16,
     accent: ACCENT_OPTIONS[1], // Cyan accent matching localhost
     bg: LIGHT_BG_OPTIONS[0],
   };
@@ -70,9 +70,14 @@ export function applyPrefs(prefs) {
     root.style.colorScheme = 'dark';
   }
 
-  // 2. ROOT FONT-SIZE SCALING
-  root.style.fontSize = `${prefs.fontSize || 18}px`;
-  root.style.setProperty('--app-font-size', `${prefs.fontSize || 18}px`);
+  // 2. ROOT FONT-SIZE SCALING (Proportional & Responsive)
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  const rawSize = Number(prefs.fontSize) || 16;
+  // If user had legacy 18px default, map it down to standard 16px
+  const userSize = rawSize === 18 && !localStorage.getItem('sg_font_custom') ? 16 : rawSize;
+  const effectiveSize = isMobile ? Math.min(userSize, 15) : userSize;
+  root.style.fontSize = `${effectiveSize}px`;
+  root.style.setProperty('--app-font-size', `${effectiveSize}px`);
 
   // 3. BACKGROUND & CARD PALETTE
   if (prefs.bg) {

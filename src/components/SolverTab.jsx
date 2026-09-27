@@ -130,7 +130,7 @@ export default function SolverTab({ onOpenQuiz, savedNotes, setSavedNotes }) {
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6 pb-32">
+    <div className="w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 space-y-4 sm:space-y-6 pb-36">
       {/* Top Engine & Auto-FAQ Cache Banner */}
       <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-900/70 p-4.5 rounded-2xl border border-slate-800 shadow-md">
         <div className="flex items-center gap-2.5">
@@ -343,42 +343,45 @@ export default function SolverTab({ onOpenQuiz, savedNotes, setSavedNotes }) {
         </div>
       </div>
 
-      {/* Multimodal Input Bar */}
-      <div className="fixed bottom-0 lg:bottom-4 left-0 right-0 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 bg-[#070913]/95 backdrop-blur-lg z-20">
-        <form onSubmit={handleSend} className="glass-card p-3 rounded-2xl border-purple-500/30 bg-[#12182B] flex items-center gap-3 shadow-2xl shadow-purple-950/40">
+      {/* Multimodal Input Bar - Always visible above mobile navigation on phone and floating on PC */}
+      <div
+        className="fixed bottom-[calc(56px+env(safe-area-inset-bottom,0px))] lg:bottom-4 left-0 right-0 max-w-5xl mx-auto px-2.5 sm:px-6 lg:px-8 py-2 sm:py-3 backdrop-blur-xl z-40 transition-colors"
+        style={{ backgroundColor: 'var(--bg-primary, #070913)' }}
+      >
+        <form onSubmit={handleSend} className="glass-card p-1.5 sm:p-2.5 rounded-2xl border-purple-500/30 bg-[#12182B] flex items-center gap-1.5 sm:gap-3 shadow-2xl shadow-purple-950/40">
           <button
             type="button"
             onClick={() => alert("Camera OCR enabled: Point camera at textbook equation.")}
-            className="p-3 rounded-xl bg-slate-800/80 text-slate-200 hover:text-white hover:bg-slate-700 transition-colors"
+            className="p-2 sm:p-2.5 rounded-xl bg-slate-800/80 text-slate-200 hover:text-white hover:bg-slate-700 transition-colors flex-shrink-0"
             title="Scan Equation / OCR"
           >
-            <Camera className="w-5 h-5" />
+            <Camera className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
 
           <button
             type="button"
             onClick={() => alert("Voice input active: Speak academic doubt now.")}
-            className="p-3 rounded-xl bg-slate-800/80 text-slate-200 hover:text-white hover:bg-slate-700 transition-colors"
+            className="p-2 sm:p-2.5 rounded-xl bg-slate-800/80 text-slate-200 hover:text-white hover:bg-slate-700 transition-colors flex-shrink-0"
             title="Voice Input"
           >
-            <Mic className="w-5 h-5" />
+            <Mic className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
 
           <input
             type="text"
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
-            placeholder="Ask any academic doubt (e.g. Schrödinger equation, Faraday law, SN2 mechanisms)..."
-            className="flex-1 bg-transparent text-sm sm:text-base text-white placeholder-slate-400 outline-none px-2 font-medium"
+            placeholder="Ask any academic doubt (e.g. Calculus, Physics, Coding)..."
+            className="flex-1 min-w-0 bg-transparent text-xs sm:text-base text-white placeholder-slate-400 outline-none px-1.5 sm:px-2 font-medium"
           />
 
           <button
             type="submit"
             disabled={loading}
-            className="p-3 px-5 rounded-xl gradient-btn-purple text-white font-bold text-xs sm:text-sm shadow-md shadow-purple-600/30 hover:scale-105 transition-transform disabled:opacity-50 flex items-center gap-2"
+            className="p-2 sm:p-2.5 px-3.5 sm:px-5 rounded-xl gradient-btn-purple text-white font-bold text-xs sm:text-sm shadow-md shadow-purple-600/30 hover:scale-105 transition-transform disabled:opacity-50 flex items-center gap-1.5 flex-shrink-0"
           >
             <span>Ask</span>
-            <ArrowUp className="w-4 h-4 stroke-[2.5]" />
+            <ArrowUp className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" />
           </button>
         </form>
       </div>

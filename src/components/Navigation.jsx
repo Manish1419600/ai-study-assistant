@@ -12,7 +12,12 @@ export default function Navigation({ activeTab, setActiveTab }) {
   ];
 
   return (
-    <nav className="mobile-bottom-nav fixed bottom-0 left-0 right-0 w-full z-40 bg-[#0B0E1B]/95 backdrop-blur-xl border-t border-slate-800/80 px-1 py-1.5 shadow-2xl">
+    <nav
+      className="mobile-bottom-nav fixed bottom-0 left-0 right-0 w-full z-40 bg-[#0B0E1B]/95 backdrop-blur-xl border-t border-slate-800/80 px-1 pt-1.5 shadow-2xl"
+      style={{
+        paddingBottom: 'max(6px, env(safe-area-inset-bottom, 6px))'
+      }}
+    >
       <div className="grid grid-cols-5 w-full items-center">
         {navItems.map((item) => {
           const Icon = item.icon;

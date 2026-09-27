@@ -124,7 +124,7 @@ export default function PlannerTab({ studyHours, setStudyHours }) {
   const completionRate = tasks.length > 0 ? Math.round((completedCount / tasks.length) * 100) : 0;
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-7 space-y-5 sm:space-y-7 pb-20">
+    <div className="w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 space-y-4 sm:space-y-6 pb-20 lg:pb-8">
       {/* Top Greeting & Streak Bar */}
       <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-900/60 p-4 sm:p-5 lg:p-6 rounded-2xl border border-slate-800 shadow-md">
         <div>
