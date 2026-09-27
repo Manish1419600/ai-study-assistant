@@ -71,8 +71,8 @@ export default function Header({ activeTab, setActiveTab, studyHours, onOpenAppe
         <div className="flex flex-col">
           <h1 className="text-sm sm:text-lg xl:text-xl font-bold tracking-tight leading-tight flex items-center gap-1.5 sm:gap-2">
             StudyGenie AI
-            <span className="hidden sm:inline-block px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30 text-[11px] font-bold whitespace-nowrap">
-              College Project
+            <span className="hidden sm:inline-block px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 text-[11px] font-bold whitespace-nowrap tracking-wide">
+              v1.0 Live
             </span>
             <span className={`hidden md:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold border whitespace-nowrap ${
               isSocketConnected 
