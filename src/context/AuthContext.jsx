@@ -4,19 +4,19 @@ import { io } from 'socket.io-client';
 
 const AuthContext = createContext();
 
-const rawBackend = import.meta.env.VITE_BACKEND_URL;
-// If running in Capacitor Native Android app, hostname is 'localhost', so route to host PC IP
-const defaultHost = (typeof window !== 'undefined' && window.location.hostname && window.location.hostname !== 'localhost')
-  ? window.location.hostname
-  : '10.184.50.108';
+const CLOUD_BACKEND = 'https://study-genie-backend.onrender.com';
+const envBackend = import.meta.env.VITE_BACKEND_URL;
 
-export const SOCKET_URL = rawBackend 
-  ? rawBackend.replace(/\/api\/?$/, '') 
-  : `http://${defaultHost}:5000`;
+// If running in local web browser on localhost:3000, use local backend.
+// Otherwise (Vercel deployment or Capacitor Android APK), connect to 24/7 Render Cloud Backend!
+const isLocalDev = typeof window !== 'undefined' && 
+  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') && 
+  !window.Capacitor;
 
-export const API_BASE_URL = rawBackend 
-  ? (rawBackend.endsWith('/api') ? rawBackend : `${rawBackend}/api`) 
-  : `http://${defaultHost}:5000/api`;
+const activeBackend = envBackend || (isLocalDev ? 'http://localhost:5000' : CLOUD_BACKEND);
+
+export const SOCKET_URL = activeBackend.replace(/\/api\/?$/, '');
+export const API_BASE_URL = activeBackend.endsWith('/api') ? activeBackend : `${activeBackend}/api`;
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => {
