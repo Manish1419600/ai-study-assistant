@@ -11,6 +11,7 @@ import ProfileTab from './components/ProfileTab';
 import QuizModal from './components/QuizModal';
 import AuthModal from './components/AuthModal';
 import AppearancePanel, { applyPrefs, getInitialPrefs } from './components/AppearancePanel';
+import PullToRefresh from './components/PullToRefresh';
 
 function AppContent() {
   const { isAuthModalOpen, setIsAuthModalOpen } = useAuth();
@@ -19,48 +20,64 @@ function AppContent() {
   const [isAppearanceOpen, setIsAppearanceOpen] = useState(false);
   const [studyHours, setStudyHours] = useState(0);
   const [savedNotes, setSavedNotes] = useState([]);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   // Apply saved appearance preferences immediately on mount
   useEffect(() => {
     applyPrefs(getInitialPrefs());
   }, []);
 
-  return (
-    <div
-      className="app-container min-h-screen text-slate-100 flex flex-col font-sans"
-      style={{ backgroundColor: 'var(--bg-primary, #070913)' }}
-    >
-      {/* Top Header */}
-      <Header
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        studyHours={studyHours}
-        onOpenAppearance={() => setIsAppearanceOpen(true)}
-      />
+  const handleGlobalRefresh = async () => {
+    setRefreshKey(k => k + 1);
+  };
 
-      {/* Main Workspace */}
-      <main className="flex-1 overflow-y-auto pb-24 lg:pb-8">
-        {activeTab === 'planner' && (
-          <PlannerTab
-            studyHours={studyHours}
-            setStudyHours={setStudyHours}
-          />
-        )}
-        {activeTab === 'solver' && (
-          <SolverTab
-            onOpenQuiz={() => setIsQuizOpen(true)}
-            savedNotes={savedNotes}
-            setSavedNotes={setSavedNotes}
-          />
-        )}
-        {activeTab === 'notes' && (
-          <NotesQuizTab onOpenQuiz={() => setIsQuizOpen(true)} />
-        )}
-        {activeTab === 'progress' && <ProgressDashboardTab />}
-        {activeTab === 'profile' && (
-          <ProfileTab onOpenAppearance={() => setIsAppearanceOpen(true)} />
-        )}
-      </main>
+  return (
+    <PullToRefresh onRefresh={handleGlobalRefresh}>
+      <div
+        className="app-container min-h-screen text-slate-100 flex flex-col font-sans"
+        style={{ backgroundColor: 'var(--bg-primary, #070913)' }}
+      >
+        {/* Top Header */}
+        <Header
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          studyHours={studyHours}
+          onOpenAppearance={() => setIsAppearanceOpen(true)}
+        />
+
+        {/* Main Workspace */}
+        <main className="flex-1 overflow-y-auto pb-24 lg:pb-8">
+          {activeTab === 'planner' && (
+            <PlannerTab
+              key={`planner-${refreshKey}`}
+              studyHours={studyHours}
+              setStudyHours={setStudyHours}
+            />
+          )}
+          {activeTab === 'solver' && (
+            <SolverTab
+              key={`solver-${refreshKey}`}
+              onOpenQuiz={() => setIsQuizOpen(true)}
+              savedNotes={savedNotes}
+              setSavedNotes={setSavedNotes}
+            />
+          )}
+          {activeTab === 'notes' && (
+            <NotesQuizTab
+              key={`notes-${refreshKey}`}
+              onOpenQuiz={() => setIsQuizOpen(true)}
+            />
+          )}
+          {activeTab === 'progress' && (
+            <ProgressDashboardTab key={`progress-${refreshKey}`} />
+          )}
+          {activeTab === 'profile' && (
+            <ProfileTab
+              key={`profile-${refreshKey}`}
+              onOpenAppearance={() => setIsAppearanceOpen(true)}
+            />
+          )}
+        </main>
 
       {/* Mobile Bottom Nav */}
       <Navigation activeTab={activeTab} setActiveTab={setActiveTab} />
@@ -74,7 +91,8 @@ function AppContent() {
         isOpen={isAppearanceOpen}
         onClose={() => setIsAppearanceOpen(false)}
       />
-    </div>
+      </div>
+    </PullToRefresh>
   );
 }
 

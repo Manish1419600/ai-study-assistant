@@ -1,12 +1,33 @@
-// src/components/Header.jsx - With Appearance and Light/Dark Mode Switcher
 import React, { useState, useEffect } from 'react';
-import { Hexagon, Bell, Calendar, Sparkles, BookOpen, TrendingUp, User, LogIn, LogOut, Clock, Palette, Sun, Moon } from 'lucide-react';
+import { Hexagon, Bell, Calendar, Sparkles, BookOpen, TrendingUp, User, LogIn, LogOut, Clock, Palette, Sun, Moon, RefreshCw } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { toggleLightDarkMode, getInitialPrefs } from './AppearancePanel';
 
 export default function Header({ activeTab, setActiveTab, studyHours, onOpenAppearance }) {
   const { user, isAuthenticated, logout, setIsAuthModalOpen, isSocketConnected } = useAuth();
   const [isLightMode, setIsLightMode] = useState(() => getInitialPrefs().mode === 'light');
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  useEffect(() => {
+    const onStart = () => setIsRefreshing(true);
+    const onDone = () => setTimeout(() => setIsRefreshing(false), 600);
+    window.addEventListener('studygenie_refresh', onStart);
+    window.addEventListener('studygenie_refresh_done', onDone);
+    return () => {
+      window.removeEventListener('studygenie_refresh', onStart);
+      window.removeEventListener('studygenie_refresh_done', onDone);
+    };
+  }, []);
+
+  const handleRefresh = (e) => {
+    if (e?.shiftKey) {
+      window.location.reload();
+      return;
+    }
+    setIsRefreshing(true);
+    window.dispatchEvent(new CustomEvent('studygenie_trigger_refresh'));
+    setTimeout(() => setIsRefreshing(false), 1200);
+  };
 
   useEffect(() => {
     const handleAppearanceChange = (e) => {
@@ -154,6 +175,24 @@ export default function Header({ activeTab, setActiveTab, studyHours, onOpenAppe
         >
           <Palette className="w-4 h-4 text-purple-400 group-hover:rotate-12 transition-transform" />
           <span className="hidden sm:inline font-bold text-xs">Theme</span>
+        </button>
+
+        {/* Quick Refresh Button (Works on both Website & Android APK) */}
+        <button
+          type="button"
+          onClick={handleRefresh}
+          title="Refresh App & Sync with Database (Hold Shift to hard reload)"
+          className={`flex items-center justify-center gap-1.5 p-2 sm:px-3 sm:py-2 rounded-xl border transition-all shadow-sm cursor-pointer ${
+            isRefreshing ? 'opacity-80 scale-95' : 'hover:scale-105 active:scale-95'
+          }`}
+          style={{
+            backgroundColor: isLightMode ? '#F1F5F9' : 'rgba(30, 41, 59, 0.9)',
+            borderColor: isLightMode ? '#CBD5E1' : 'rgba(51, 65, 85, 0.8)',
+            color: isLightMode ? '#0F172A' : '#F8FAFC'
+          }}
+        >
+          <RefreshCw className={`w-4 h-4 text-cyan-400 ${isRefreshing ? 'animate-spin' : ''}`} />
+          <span className="hidden sm:inline font-bold text-xs">Refresh</span>
         </button>
 
         {/* Notifications - Hidden on small mobile */}
