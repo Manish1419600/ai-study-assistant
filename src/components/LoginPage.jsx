@@ -12,13 +12,9 @@ import {
   LogIn,
   UserPlus,
   ArrowRight,
-  ShieldCheck,
-  CheckCircle2,
-  Calendar,
-  TrendingUp,
   Eye,
   EyeOff,
-  Zap
+  ShieldCheck
 } from 'lucide-react';
 
 export default function LoginPage() {
@@ -26,7 +22,6 @@ export default function LoginPage() {
   const [isRegisterMode, setIsRegisterMode] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
-  const [demoLoading, setDemoLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -73,38 +68,6 @@ export default function LoginPage() {
     }
   };
 
-  // Instant 1-Click Demo Login for fast access & evaluation
-  const handleDemoLogin = async () => {
-    setError('');
-    setDemoLoading(true);
-    const demoEmail = 'student@studygenie.ai';
-    const demoPassword = 'password123';
-
-    // Try logging into demo account
-    let res = await login(demoEmail, demoPassword);
-    if (!res.success) {
-      // If demo account doesn't exist yet, register it on the fly
-      res = await register(
-        'Alex Chen (Demo Student)',
-        demoEmail,
-        demoPassword,
-        'Stanford University',
-        'Computer Science & AI'
-      );
-      if (!res.success) {
-        setError(res.error || 'Demo login failed. Please register a new account below.');
-      }
-    }
-    setDemoLoading(false);
-  };
-
-  const featurePills = [
-    { icon: Calendar, label: 'Smart Planner & Pomodoro (FR1)', color: 'text-cyan-400' },
-    { icon: Sparkles, label: 'Gemini AI Doubt Solver (FR3)', color: 'text-purple-400' },
-    { icon: BookOpen, label: 'AI Flashcards & Quizzes (FR2)', color: 'text-emerald-400' },
-    { icon: TrendingUp, label: 'Progress Analytics (FR5)', color: 'text-amber-400' }
-  ];
-
   return (
     <div
       className="min-h-screen w-full flex flex-col justify-center items-center px-4 py-8 sm:py-12 relative overflow-x-hidden font-sans"
@@ -130,12 +93,12 @@ export default function LoginPage() {
               <span>StudyGenie AI Workspace</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-              {isRegisterMode ? 'Create Your Student Account' : 'Welcome to StudyGenie AI'}
+              {isRegisterMode ? 'Create Your Account' : 'Welcome to StudyGenie AI'}
             </h1>
             <p className="text-xs sm:text-sm text-slate-300 max-w-sm mx-auto leading-relaxed">
               {isRegisterMode
-                ? 'Register now to unlock all academic tools, AI doubt solver, study planner, and analytics.'
-                : 'Sign in to access your personal study planner, Gemini AI doubt solver, and progress dashboard.'}
+                ? 'Register now to access your personal academic workspace.'
+                : 'Sign in to access your personal study workspace.'}
             </p>
           </div>
         </div>
@@ -291,78 +254,51 @@ export default function LoginPage() {
             {/* Primary Submit Button */}
             <button
               type="submit"
-              disabled={loading || demoLoading}
+              disabled={loading}
               style={{
                 background: 'linear-gradient(135deg, #7C3AED 0%, #4F46E5 100%)',
                 color: '#FFFFFF'
               }}
-              className="w-full py-3 px-4 rounded-xl text-white font-bold text-xs sm:text-sm shadow-xl shadow-purple-600/30 hover:scale-[1.01] active:scale-[0.99] transition-all disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer min-h-[46px]"
+              className="w-full py-3 px-4 rounded-xl text-white font-bold text-xs sm:text-sm shadow-xl shadow-purple-600/30 hover:scale-[1.01] active:scale-[0.99] transition-all disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer min-h-[46px] mt-2"
             >
               {loading ? (
                 <span>Verifying credentials...</span>
               ) : isRegisterMode ? (
                 <>
-                  <span>Create Account &amp; Unlock App</span>
+                  <span>Create Account</span>
                   <ArrowRight className="w-4 h-4" />
                 </>
               ) : (
                 <>
-                  <span>Sign In to Workspace</span>
+                  <span>Sign In</span>
                   <ArrowRight className="w-4 h-4" />
                 </>
               )}
             </button>
           </form>
 
-          {/* Divider */}
-          <div className="relative flex py-1 items-center">
-            <div className="flex-grow border-t border-slate-800"></div>
-            <span className="flex-shrink mx-3 text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
-              Or Fast Access
-            </span>
-            <div className="flex-grow border-t border-slate-800"></div>
+          {/* Toggle between Sign In and Sign Up */}
+          <div className="pt-3 border-t border-slate-800 text-center">
+            <p className="text-xs text-slate-400">
+              {isRegisterMode ? 'Already have an account?' : "Don't have an account yet?"}{' '}
+              <button
+                type="button"
+                onClick={() => {
+                  setIsRegisterMode(!isRegisterMode);
+                  setError('');
+                }}
+                className="text-purple-400 hover:text-purple-300 font-bold underline ml-1 cursor-pointer"
+              >
+                {isRegisterMode ? 'Sign In' : 'Create Account'}
+              </button>
+            </p>
           </div>
-
-          {/* 1-Click Demo Account Button */}
-          <button
-            type="button"
-            onClick={handleDemoLogin}
-            disabled={loading || demoLoading}
-            className="w-full py-2.5 px-4 rounded-xl bg-slate-900/90 hover:bg-slate-800/90 border border-slate-700/80 text-cyan-300 hover:text-white font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md disabled:opacity-50"
-          >
-            <Zap className="w-4 h-4 text-amber-400 fill-amber-400" />
-            <span>{demoLoading ? 'Logging into Demo...' : 'Instant 1-Click Demo Login'}</span>
-          </button>
         </div>
 
-        {/* Features Locked Notice / Project Modules Banner */}
-        <div className="p-4 rounded-2xl bg-slate-900/70 border border-slate-800 space-y-2.5 shadow-lg">
-          <div className="flex items-center gap-2">
-            <ShieldCheck className="w-4 h-4 text-emerald-400" />
-            <span className="text-xs font-bold text-slate-200">
-              Functions Unlocked After Login (FR1 – FR5):
-            </span>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-            {featurePills.map((pill, idx) => {
-              const Icon = pill.icon;
-              return (
-                <div key={idx} className="flex items-center gap-2 p-2 rounded-lg bg-slate-950/60 border border-slate-800/80 text-slate-300">
-                  <Icon className={`w-3.5 h-3.5 ${pill.color} shrink-0`} />
-                  <span className="text-[11px] font-medium truncate">{pill.label}</span>
-                </div>
-              );
-            })}
-          </div>
-
-          <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400">
-            <span className="flex items-center gap-1 text-emerald-400">
-              <CheckCircle2 className="w-3 h-3" />
-              Isolated Student Database
-            </span>
-            <span>JWT Auth &amp; MERN Stack</span>
-          </div>
+        {/* Security Badge */}
+        <div className="flex items-center justify-center gap-1.5 text-slate-400 text-xs">
+          <ShieldCheck className="w-4 h-4 text-emerald-400" />
+          <span>Encrypted Session • User-Specific Database Storage</span>
         </div>
 
       </div>
