@@ -15,11 +15,12 @@ import {
   Layers,
   Award,
   BookOpen,
-  Palette
+  Palette,
+  LogOut
 } from 'lucide-react';
 
 export default function ProfileTab({ onOpenAppearance }) {
-  const { user, authFetch, isAuthenticated } = useAuth();
+  const { user, authFetch, isAuthenticated, logout } = useAuth();
   
   // Profile editable state
   const [isEditingProfile, setIsEditingProfile] = useState(false);
@@ -347,6 +348,24 @@ export default function ProfileTab({ onOpenAppearance }) {
                 <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                 <span>Modular Codebase</span>
               </div>
+            </div>
+          </div>
+
+          {/* Account Session & Sign Out Card */}
+          <div className="academic-card space-y-3 border-red-500/20 bg-red-950/20">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-sm font-bold text-white">Active Session</h3>
+                <p className="text-xs text-slate-400">Signed in as {user?.email || 'Student'}</p>
+              </div>
+              <button
+                type="button"
+                onClick={logout}
+                className="px-4 py-2 rounded-xl bg-red-600/80 hover:bg-red-600 text-white font-bold text-xs flex items-center gap-1.5 transition-colors shadow-md cursor-pointer"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+                <span>Sign Out</span>
+              </button>
             </div>
           </div>
         </div>

@@ -12,9 +12,10 @@ import QuizModal from './components/QuizModal';
 import AuthModal from './components/AuthModal';
 import AppearancePanel, { applyPrefs, getInitialPrefs } from './components/AppearancePanel';
 import PullToRefresh from './components/PullToRefresh';
+import LoginPage from './components/LoginPage';
 
 function AppContent() {
-  const { isAuthModalOpen, setIsAuthModalOpen } = useAuth();
+  const { user, isAuthenticated, isAuthModalOpen, setIsAuthModalOpen } = useAuth();
   const [activeTab, setActiveTab] = useState('planner');
   const [isQuizOpen, setIsQuizOpen] = useState(false);
   const [isAppearanceOpen, setIsAppearanceOpen] = useState(false);
@@ -30,6 +31,13 @@ function AppContent() {
   const handleGlobalRefresh = async () => {
     setRefreshKey(k => k + 1);
   };
+
+  // Enforce Authentication Gate:
+  // If user is not logged in, render the dedicated LoginPage first.
+  // All other FRs (Planner, Solver, Notes, Quizzes, Analytics) unlock only after logging in!
+  if (!isAuthenticated || !user) {
+    return <LoginPage />;
+  }
 
   return (
     <PullToRefresh onRefresh={handleGlobalRefresh}>
