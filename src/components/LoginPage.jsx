@@ -14,7 +14,8 @@ import {
   ArrowRight,
   Eye,
   EyeOff,
-  ShieldCheck
+  ShieldCheck,
+  AlertCircle
 } from 'lucide-react';
 
 export default function LoginPage() {
@@ -111,10 +112,11 @@ export default function LoginPage() {
               setIsRegisterMode(false);
               setError('');
             }}
+            style={!isRegisterMode ? { color: '#FFFFFF' } : undefined}
             className={`flex-1 py-2 sm:py-2.5 rounded-lg font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-2 cursor-pointer ${
               !isRegisterMode
-                ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md'
-                : 'text-slate-400 hover:text-white'
+                ? 'gradient-btn-purple text-white shadow-md'
+                : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white'
             }`}
           >
             <LogIn className="w-4 h-4" />
@@ -127,10 +129,11 @@ export default function LoginPage() {
               setIsRegisterMode(true);
               setError('');
             }}
+            style={isRegisterMode ? { color: '#FFFFFF' } : undefined}
             className={`flex-1 py-2 sm:py-2.5 rounded-lg font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-2 cursor-pointer ${
               isRegisterMode
-                ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md'
-                : 'text-slate-400 hover:text-white'
+                ? 'gradient-btn-purple text-white shadow-md'
+                : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white'
             }`}
           >
             <UserPlus className="w-4 h-4" />
@@ -143,9 +146,16 @@ export default function LoginPage() {
 
           {/* Error Notice */}
           {error && (
-            <div className="p-3.5 rounded-xl bg-red-950/80 border border-red-500/40 text-red-300 text-xs sm:text-sm font-medium flex items-start gap-2.5 shadow-md">
-              <span className="text-red-400 font-bold shrink-0 mt-0.5">⚠️</span>
-              <p className="flex-1 leading-snug">{error}</p>
+            <div
+              role="alert"
+              className="auth-error-banner p-3.5 sm:p-4 rounded-xl flex items-center gap-3 shadow-md"
+            >
+              <div className="w-7 h-7 rounded-lg bg-red-500/20 flex items-center justify-center shrink-0">
+                <AlertCircle className="auth-error-icon w-4.5 h-4.5" />
+              </div>
+              <div className="auth-error-msg flex-1 text-xs sm:text-sm font-bold leading-snug">
+                {error}
+              </div>
             </div>
           )}
 
@@ -259,19 +269,19 @@ export default function LoginPage() {
                 background: 'linear-gradient(135deg, #7C3AED 0%, #4F46E5 100%)',
                 color: '#FFFFFF'
               }}
-              className="w-full py-3 px-4 rounded-xl text-white font-bold text-xs sm:text-sm shadow-xl shadow-purple-600/30 hover:scale-[1.01] active:scale-[0.99] transition-all disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer min-h-[46px] mt-2"
+              className="gradient-btn-purple auth-submit-btn w-full py-3 px-4 rounded-xl font-bold text-xs sm:text-sm shadow-xl shadow-purple-600/30 hover:scale-[1.01] active:scale-[0.99] transition-all disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer min-h-[46px] mt-2"
             >
               {loading ? (
-                <span>Verifying credentials...</span>
+                <span className="font-bold" style={{ color: '#FFFFFF' }}>Verifying credentials...</span>
               ) : isRegisterMode ? (
                 <>
-                  <span>Create Account</span>
-                  <ArrowRight className="w-4 h-4" />
+                  <span className="font-bold" style={{ color: '#FFFFFF' }}>Create Account</span>
+                  <ArrowRight className="w-4 h-4" style={{ color: '#FFFFFF' }} />
                 </>
               ) : (
                 <>
-                  <span>Sign In</span>
-                  <ArrowRight className="w-4 h-4" />
+                  <span className="font-bold" style={{ color: '#FFFFFF' }}>Sign In</span>
+                  <ArrowRight className="w-4 h-4" style={{ color: '#FFFFFF' }} />
                 </>
               )}
             </button>
