@@ -7,13 +7,16 @@ const AuthContext = createContext();
 const CLOUD_BACKEND = 'https://study-genie-backend.onrender.com';
 const envBackend = import.meta.env.VITE_BACKEND_URL;
 
-// If running in local web browser on localhost:3000, use local backend.
-// Otherwise (Vercel deployment or Capacitor Android APK), connect to 24/7 Render Cloud Backend!
+// If running in local web browser or live app on local network, use local backend.
+// Otherwise (production Vercel deployment), connect to 24/7 Render Cloud Backend!
 const isLocalDev = typeof window !== 'undefined' && 
-  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') && 
-  !window.Capacitor;
+  (window.location.hostname === 'localhost' || 
+   window.location.hostname === '127.0.0.1' || 
+   window.location.hostname.startsWith('192.168.') || 
+   window.location.hostname.startsWith('10.') || 
+   window.location.hostname.startsWith('172.'));
 
-const activeBackend = envBackend || (isLocalDev ? 'http://localhost:5000' : CLOUD_BACKEND);
+const activeBackend = envBackend || (isLocalDev ? `http://${window.location.hostname}:5000` : CLOUD_BACKEND);
 
 export const SOCKET_URL = activeBackend.replace(/\/api\/?$/, '');
 export const API_BASE_URL = activeBackend.endsWith('/api') ? activeBackend : `${activeBackend}/api`;
