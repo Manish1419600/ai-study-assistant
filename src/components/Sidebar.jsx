@@ -1,56 +1,62 @@
 // src/components/Sidebar.jsx - Modern Left Sidebar Navigation
 import React from 'react';
 import { 
-  LayoutGrid, 
-  FileText, 
+  Calendar, 
+  Sparkles, 
   BookOpen, 
+  TrendingUp, 
   User, 
   LogOut, 
-  Calendar, 
-  Sparkles,
-  HelpCircle,
-  X
+  Hexagon, 
+  X 
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
-export default function Sidebar({ activeTab, setActiveTab, onOpenQuiz, isSidebarOpen, setIsSidebarOpen }) {
-  const { logout } = useAuth();
+export default function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) {
+  const { logout, isSocketConnected, isOnline } = useAuth();
 
   const navItems = [
-    { id: 'progress', label: 'Dashboard',    icon: LayoutGrid },
     { id: 'planner',  label: 'Planner',      icon: Calendar },
-    { id: 'solver',   label: 'Doubt Solver', icon: HelpCircle },
-    { id: 'notes',    label: 'Documents',    icon: FileText },
-    { id: 'quiz',     label: 'Flashcards',   icon: BookOpen },
+    { id: 'solver',   label: 'Doubt Solver', icon: Sparkles,   badge: 'AI' },
+    { id: 'notes',    label: 'Smart Notes',  icon: BookOpen },
+    { id: 'progress', label: 'Dashboard',    icon: TrendingUp, badge: 'Live' },
     { id: 'profile',  label: 'Profile',      icon: User },
   ];
 
   const handleSelectTab = (tabId) => {
-    if (tabId === 'quiz') {
-      if (onOpenQuiz) onOpenQuiz();
-      setActiveTab('notes');
-    } else {
-      setActiveTab(tabId);
-    }
+    setActiveTab(tabId);
     if (setIsSidebarOpen) setIsSidebarOpen(false);
   };
 
   const sidebarContent = (
     <div className="h-full flex flex-col justify-between p-4 bg-white dark:bg-[#0B0E1B] border-r border-slate-200/80 dark:border-slate-800 select-none">
+      
       {/* Brand Header */}
       <div>
-        <div className="flex items-center justify-between px-2 py-3 mb-6">
+        <div className="flex items-center justify-between px-2 py-3 mb-5">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-teal-500 via-emerald-500 to-teal-400 flex items-center justify-center text-white shadow-md shadow-emerald-500/20 flex-shrink-0">
-              <Sparkles className="w-5 h-5 text-white" />
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-cyan-400 p-[1.5px] flex items-center justify-center shadow-md shadow-purple-600/20 flex-shrink-0">
+              <div className="w-full h-full bg-[#0E1322] rounded-[9px] flex items-center justify-center">
+                <Hexagon className="w-5 h-5 text-cyan-400 fill-cyan-400/20" />
+              </div>
             </div>
+
             <div className="flex flex-col">
-              <span className="font-extrabold text-slate-900 dark:text-white text-base tracking-tight leading-tight">
-                AI Learning Assistant
-              </span>
-              <span className="text-[10px] font-medium text-slate-400 dark:text-slate-500">
-                StudyGenie Workspace
-              </span>
+              <div className="flex items-center gap-1.5">
+                <span className="font-extrabold text-slate-900 dark:text-white text-base tracking-tight leading-tight">
+                  StudyGenie<span className="text-cyan-400 ml-0.5">AI</span>
+                </span>
+                <span className="px-1.5 py-0.2 rounded-full bg-cyan-500/15 text-cyan-600 dark:text-cyan-300 border border-cyan-500/30 text-[9px] font-extrabold">
+                  v1.0
+                </span>
+              </div>
+              
+              <div className="flex items-center gap-1 mt-0.5">
+                <span className={`w-1.5 h-1.5 rounded-full ${isSocketConnected ? 'bg-emerald-500 animate-pulse' : 'bg-cyan-500'}`} />
+                <span className="text-[10px] font-semibold text-slate-500 dark:text-slate-400">
+                  {isSocketConnected ? 'Cloud Synced' : (!isOnline ? 'Offline' : 'Ready')}
+                </span>
+              </div>
             </div>
           </div>
 
@@ -58,14 +64,14 @@ export default function Sidebar({ activeTab, setActiveTab, onOpenQuiz, isSidebar
           {setIsSidebarOpen && (
             <button
               onClick={() => setIsSidebarOpen(false)}
-              className="lg:hidden p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800"
+              className="lg:hidden p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
           )}
         </div>
 
-        {/* Navigation Links */}
+        {/* Navigation Links matching reference screenshot */}
         <nav className="flex flex-col gap-1.5">
           {navItems.map((item) => {
             const Icon = item.icon;
@@ -74,14 +80,28 @@ export default function Sidebar({ activeTab, setActiveTab, onOpenQuiz, isSidebar
               <button
                 key={item.id}
                 onClick={() => handleSelectTab(item.id)}
-                className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-xl font-bold text-sm transition-all duration-200 cursor-pointer ${
+                className={`w-full flex items-center justify-between px-4 py-3 rounded-xl font-bold text-sm transition-all duration-200 cursor-pointer ${
                   isActive
                     ? 'bg-[#00B894] text-white shadow-md shadow-emerald-500/20'
                     : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800/60'
                 }`}
               >
-                <Icon className={`w-5 h-5 flex-shrink-0 ${isActive ? 'text-white' : 'text-slate-500 dark:text-slate-400'}`} />
-                <span className="tracking-tight">{item.label}</span>
+                <div className="flex items-center gap-3.5">
+                  <Icon className={`w-5 h-5 flex-shrink-0 ${isActive ? 'text-white' : 'text-slate-500 dark:text-slate-400'}`} />
+                  <span className="tracking-tight">{item.label}</span>
+                </div>
+
+                {item.badge && (
+                  <span
+                    className={`px-1.5 py-0.5 rounded-full text-[9px] font-extrabold tracking-wider uppercase ${
+                      isActive 
+                        ? 'bg-white/20 text-white' 
+                        : 'bg-slate-200/80 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
+                    }`}
+                  >
+                    {item.badge}
+                  </span>
+                )}
               </button>
             );
           })}
@@ -103,7 +123,7 @@ export default function Sidebar({ activeTab, setActiveTab, onOpenQuiz, isSidebar
 
   return (
     <>
-      {/* Desktop Sticky Sidebar */}
+      {/* Desktop Sticky Left Sidebar */}
       <aside className="hidden lg:block w-64 h-screen sticky top-0 flex-shrink-0 z-30">
         {sidebarContent}
       </aside>

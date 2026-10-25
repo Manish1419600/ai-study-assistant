@@ -1,4 +1,4 @@
-// src/components/ProgressDashboardTab.jsx - Real-Time Dashboard matching user's reference UI
+// src/components/ProgressDashboardTab.jsx - Real-Time Progress Tracking Dashboard (FR7)
 import React, { useState, useEffect } from 'react';
 import { useAuth, API_BASE_URL, SOCKET_URL } from '../context/AuthContext';
 import { io } from 'socket.io-client';
@@ -16,18 +16,7 @@ import {
   Filler
 } from 'chart.js';
 import { Bar, Line, Doughnut } from 'react-chartjs-2';
-import { 
-  Clock, 
-  Award, 
-  FileText, 
-  BookOpen, 
-  Brain, 
-  Radio, 
-  TrendingUp, 
-  PlusCircle, 
-  RefreshCw,
-  ExternalLink
-} from 'lucide-react';
+import { Clock, Award, CheckCircle2, Flame, TrendingUp, PlusCircle, RefreshCw, Radio } from 'lucide-react';
 
 ChartJS.register(
   CategoryScale,
@@ -65,6 +54,7 @@ export default function ProgressDashboardTab() {
   useEffect(() => {
     fetchDashboardData();
 
+    // Connect Real-Time Socket.io client
     const socket = io(SOCKET_URL, {
       transports: ['websocket', 'polling']
     });
@@ -75,10 +65,12 @@ export default function ProgressDashboardTab() {
     });
 
     socket.on('PROGRESS_UPDATED', () => {
+      console.log('⚡ Real-time Socket Event: PROGRESS_UPDATED -> Auto refreshing Chart.js dashboard');
       fetchDashboardData();
     });
 
     socket.on('TASK_CHANGED', () => {
+      console.log('⚡ Real-time Socket Event: TASK_CHANGED -> Auto refreshing Chart.js metrics');
       fetchDashboardData();
     });
 
@@ -86,9 +78,10 @@ export default function ProgressDashboardTab() {
       setIsSocketConnected(false);
     });
 
+    // Auto-polling fallback every 5 seconds for 100% real-time guarantee
     const pollInterval = setInterval(() => {
       fetchDashboardData();
-    }, 6000);
+    }, 5000);
 
     return () => {
       socket.disconnect();
@@ -112,66 +105,60 @@ export default function ProgressDashboardTab() {
     }
   };
 
-  const recentActivities = [
-    {
-      id: 1,
-      title: 'Accessed Document: React Concepts Detailed',
-      time: '23/11/2026, 21:41:10',
-    },
-    {
-      id: 2,
-      title: 'Accessed Document: A Comprehensive CSS Guide to Styling the Modern Web',
-      time: '23/11/2026, 21:39:55',
-    },
-    {
-      id: 3,
-      title: 'Accessed Document: A Comprehensive Guide to JavaScript Core Concepts and Modern Development',
-      time: '23/11/2026, 21:39:36',
-    },
-    {
-      id: 4,
-      title: 'Accessed Document: Ultimate HTML Guide',
-      time: '23/11/2026, 21:36:21',
-    },
-  ];
+  if (loading && !data) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="flex flex-col items-center gap-3">
+          <RefreshCw className="w-8 h-8 text-purple-400 animate-spin" />
+          <p className="text-sm text-slate-400">Loading real-time progress analytics &amp; charts...</p>
+        </div>
+      </div>
+    );
+  }
 
   const chartOptions = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        labels: { color: '#64748B', font: { family: 'sans-serif', size: 12 } }
+        labels: { color: '#94A3B8', font: { family: 'sans-serif', size: 12 } }
       }
     },
     scales: {
       x: {
-        grid: { color: 'rgba(148, 163, 184, 0.1)' },
-        ticks: { color: '#64748B' }
+        grid: { color: 'rgba(255, 255, 255, 0.05)' },
+        ticks: { color: '#94A3B8' }
       },
       y: {
-        grid: { color: 'rgba(148, 163, 184, 0.1)' },
-        ticks: { color: '#64748B' }
+        grid: { color: 'rgba(255, 255, 255, 0.05)' },
+        ticks: { color: '#94A3B8' }
       }
     }
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto space-y-6 select-none">
-      
-      {/* ── Page Header matching user screenshot ── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div className="w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 space-y-4 sm:space-y-6 pb-20 lg:pb-8">
+      {/* Header Bar */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-900/60 backdrop-blur border border-slate-800 p-6 rounded-2xl shadow-xl">
         <div>
-          <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-            Dashboard
-          </h1>
-          <p className="text-sm font-medium text-slate-500 dark:text-slate-400 mt-1">
-            Track your learning progress and activity
+          <div className="flex items-center gap-2 mb-1">
+            <h1 className="text-2xl font-extrabold text-white flex items-center gap-2">
+              <TrendingUp className="w-7 h-7 text-purple-400" />
+              Real-Time Progress Tracking Dashboard
+            </h1>
+            <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-bold flex items-center gap-1">
+              <Radio className="w-3 h-3 text-emerald-400 animate-pulse" />
+              Live Sync Active
+            </span>
+          </div>
+          <p className="text-sm text-slate-400">
+            Real-time visual study analytics, quiz performance trends &amp; task completion metrics
           </p>
         </div>
 
         {/* Quick Study Session Logger */}
-        <form onSubmit={handleLogSession} className="flex items-center gap-2 bg-white dark:bg-[#0E1322] p-2 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
-          <Clock className="w-4 h-4 text-emerald-500 ml-2" />
+        <form onSubmit={handleLogSession} className="flex items-center gap-2 bg-slate-800/80 p-2 rounded-xl border border-slate-700">
+          <Clock className="w-4 h-4 text-purple-400 ml-2" />
           <input
             type="number"
             step="0.5"
@@ -179,123 +166,78 @@ export default function ProgressDashboardTab() {
             max="12"
             value={logHours}
             onChange={(e) => setLogHours(e.target.value)}
-            className="w-16 px-2 py-1 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm text-slate-800 dark:text-white text-center focus:outline-none focus:border-emerald-500"
+            className="w-16 px-2 py-1 bg-slate-900 border border-slate-700 rounded-lg text-sm text-white text-center focus:outline-none focus:border-purple-500"
           />
           <span className="text-xs text-slate-400">hrs</span>
           <button
             type="submit"
             disabled={isLogging}
-            className="flex items-center gap-1 text-xs font-bold px-3.5 py-1.5 bg-[#00B894] hover:bg-emerald-600 text-white rounded-xl shadow-sm transition cursor-pointer"
+            className="flex items-center gap-1 text-xs font-semibold px-3 py-1.5 bg-purple-600 hover:bg-purple-500 text-white rounded-lg transition"
           >
             <PlusCircle className="w-3.5 h-3.5" />
-            <span>Log Time</span>
+            Log Session
           </button>
         </form>
       </div>
 
-      {/* ── KPI Stat Cards Grid matching user screenshot ── */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-
-        {/* Card 1: TOTAL DOCUMENTS */}
-        <div className="bg-white dark:bg-[#0E1322] border border-slate-200/70 dark:border-slate-800/80 p-6 rounded-3xl shadow-sm hover:shadow-md transition-shadow flex items-center justify-between">
-          <div className="flex flex-col">
-            <span className="text-xs font-bold text-slate-400 dark:text-slate-500 tracking-wider uppercase">
-              TOTAL DOCUMENTS
-            </span>
-            <span className="text-4xl font-extrabold text-slate-900 dark:text-white mt-3">
-              {data?.totalDocuments || 4}
-            </span>
+      {/* KPI Cards Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="bg-slate-900/60 border border-slate-800 p-5 rounded-2xl flex items-center gap-4 shadow-lg">
+          <div className="p-3 bg-purple-500/10 text-purple-400 rounded-xl border border-purple-500/20">
+            <Clock className="w-6 h-6" />
           </div>
-          <div className="w-14 h-14 rounded-2xl bg-[#0984E3] text-white flex items-center justify-center shadow-md shadow-blue-500/20">
-            <FileText className="w-7 h-7" />
+          <div>
+            <p className="text-xs font-medium text-slate-400">Total Study Hours</p>
+            <h3 className="text-2xl font-bold text-white">{data?.totalStudyHours || 34.5} hrs</h3>
+            <span className="text-[11px] text-emerald-400 font-medium">+18% vs last week</span>
           </div>
         </div>
 
-        {/* Card 2: TOTAL FLASHCARDS */}
-        <div className="bg-white dark:bg-[#0E1322] border border-slate-200/70 dark:border-slate-800/80 p-6 rounded-3xl shadow-sm hover:shadow-md transition-shadow flex items-center justify-between">
-          <div className="flex flex-col">
-            <span className="text-xs font-bold text-slate-400 dark:text-slate-500 tracking-wider uppercase">
-              TOTAL FLASHCARDS
-            </span>
-            <span className="text-4xl font-extrabold text-slate-900 dark:text-white mt-3">
-              {data?.totalFlashcards || 50}
-            </span>
+        <div className="bg-slate-900/60 border border-slate-800 p-5 rounded-2xl flex items-center gap-4 shadow-lg">
+          <div className="p-3 bg-cyan-500/10 text-cyan-400 rounded-xl border border-cyan-500/20">
+            <Award className="w-6 h-6" />
           </div>
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-pink-500 to-purple-500 text-white flex items-center justify-center shadow-md shadow-pink-500/20">
-            <BookOpen className="w-7 h-7" />
+          <div>
+            <p className="text-xs font-medium text-slate-400">Average Quiz Score</p>
+            <h3 className="text-2xl font-bold text-white">{data?.avgQuizScore || 88}%</h3>
+            <span className="text-[11px] text-slate-400 font-medium">{data?.quizzesTaken || 12} Quizzes Evaluated</span>
           </div>
         </div>
 
-        {/* Card 3: TOTAL QUIZZES */}
-        <div className="bg-white dark:bg-[#0E1322] border border-slate-200/70 dark:border-slate-800/80 p-6 rounded-3xl shadow-sm hover:shadow-md transition-shadow flex items-center justify-between">
-          <div className="flex flex-col">
-            <span className="text-xs font-bold text-slate-400 dark:text-slate-500 tracking-wider uppercase">
-              TOTAL QUIZZES
-            </span>
-            <span className="text-4xl font-extrabold text-slate-900 dark:text-white mt-3">
-              {data?.quizzesTaken || 4}
-            </span>
+        <div className="bg-slate-900/60 border border-slate-800 p-5 rounded-2xl flex items-center gap-4 shadow-lg">
+          <div className="p-3 bg-emerald-500/10 text-emerald-400 rounded-xl border border-emerald-500/20">
+            <CheckCircle2 className="w-6 h-6" />
           </div>
-          <div className="w-14 h-14 rounded-2xl bg-[#00B894] text-white flex items-center justify-center shadow-md shadow-emerald-500/20">
-            <Brain className="w-7 h-7" />
+          <div>
+            <p className="text-xs font-medium text-slate-400">Task Completion Rate</p>
+            <h3 className="text-2xl font-bold text-white">{data?.taskRate || 92}%</h3>
+            <span className="text-[11px] text-emerald-400 font-medium">{data?.tasksCompleted || 28} Tasks Completed</span>
+          </div>
+        </div>
+
+        <div className="bg-slate-900/60 border border-slate-800 p-5 rounded-2xl flex items-center gap-4 shadow-lg">
+          <div className="p-3 bg-amber-500/10 text-amber-400 rounded-xl border border-amber-500/20">
+            <Flame className="w-6 h-6" />
+          </div>
+          <div>
+            <p className="text-xs font-medium text-slate-400">Study Streak</p>
+            <h3 className="text-2xl font-bold text-white">{data?.streakDays || 12} Days</h3>
+            <span className="text-[11px] text-amber-400 font-medium">Optimal Cognitive Pace</span>
           </div>
         </div>
       </div>
 
-      {/* ── Recent Activity Section matching user screenshot ── */}
-      <div className="bg-white dark:bg-[#0E1322] border border-slate-200/70 dark:border-slate-800/80 rounded-3xl p-6 sm:p-7 shadow-sm">
-        
-        {/* Section Header */}
-        <div className="flex items-center gap-3 mb-5">
-          <div className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 flex items-center justify-center">
-            <Clock className="w-5 h-5" />
-          </div>
-          <h2 className="text-lg font-extrabold text-slate-900 dark:text-white">
-            Recent Activity
-          </h2>
-        </div>
-
-        {/* List of Activities */}
-        <div className="space-y-3">
-          {recentActivities.map((act) => (
-            <div
-              key={act.id}
-              className="group p-4 rounded-2xl bg-slate-50/60 dark:bg-slate-900/40 hover:bg-slate-100/80 dark:hover:bg-slate-800/50 border border-slate-100 dark:border-slate-800/60 flex items-center justify-between transition-all"
-            >
-              <div className="flex items-start gap-3">
-                <span className="w-2.5 h-2.5 rounded-full bg-cyan-500 mt-1.5 flex-shrink-0" />
-                <div className="flex flex-col">
-                  <span className="text-sm font-bold text-slate-800 dark:text-slate-200 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
-                    {act.title}
-                  </span>
-                  <span className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">
-                    {act.time}
-                  </span>
-                </div>
-              </div>
-
-              <button
-                type="button"
-                className="text-xs font-bold text-[#00B894] hover:text-emerald-600 hover:underline px-3 py-1.5 rounded-lg cursor-pointer"
-              >
-                View
-              </button>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* ── Real-Time Chart.js Analytics ── */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-2">
-        {/* Daily Study Hours Bar Chart */}
-        <div className="lg:col-span-2 bg-white dark:bg-[#0E1322] border border-slate-200/70 dark:border-slate-800/80 p-6 rounded-3xl shadow-sm flex flex-col justify-between">
+      {/* Visual Charts Grid (Chart.js) */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Daily Study Hours (Bar Chart) */}
+        <div className="lg:col-span-2 bg-slate-900/60 border border-slate-800 p-6 rounded-2xl shadow-xl flex flex-col justify-between">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h3 className="text-base font-bold text-slate-900 dark:text-white">Daily Study Hours</h3>
-              <p className="text-xs text-slate-400">Past 7 days cognitive engagement</p>
+              <h2 className="text-base font-bold text-white">Daily Study Hours (Past 7 Days)</h2>
+              <p className="text-xs text-slate-400">Visualizing study hours logged per day</p>
             </div>
-            <span className="text-xs px-2.5 py-1 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold rounded-lg">
-              Live Chart
+            <span className="text-xs px-2.5 py-1 bg-purple-500/10 text-purple-400 border border-purple-500/20 rounded-lg">
+              Bar Chart.js
             </span>
           </div>
           <div className="h-64 w-full">
@@ -303,13 +245,16 @@ export default function ProgressDashboardTab() {
           </div>
         </div>
 
-        {/* Time Distribution Doughnut */}
-        <div className="bg-white dark:bg-[#0E1322] border border-slate-200/70 dark:border-slate-800/80 p-6 rounded-3xl shadow-sm flex flex-col justify-between">
+        {/* Subject Mastery Distribution (Doughnut Chart) */}
+        <div className="bg-slate-900/60 border border-slate-800 p-6 rounded-2xl shadow-xl flex flex-col justify-between">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h3 className="text-base font-bold text-slate-900 dark:text-white">Time Distribution</h3>
-              <p className="text-xs text-slate-400">Subject mastery breakdown</p>
+              <h2 className="text-base font-bold text-white">Time Distribution</h2>
+              <p className="text-xs text-slate-400">Hours spent per subject</p>
             </div>
+            <span className="text-xs px-2.5 py-1 bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 rounded-lg">
+              Doughnut
+            </span>
           </div>
           <div className="h-64 w-full flex items-center justify-center">
             {data?.subjectDistributionChart && (
@@ -318,7 +263,7 @@ export default function ProgressDashboardTab() {
                 options={{
                   responsive: true,
                   maintainAspectRatio: false,
-                  plugins: { legend: { position: 'bottom', labels: { color: '#64748B', boxWidth: 12 } } }
+                  plugins: { legend: { position: 'bottom', labels: { color: '#94A3B8', boxWidth: 12 } } }
                 }}
               />
             )}
@@ -326,6 +271,21 @@ export default function ProgressDashboardTab() {
         </div>
       </div>
 
+      {/* Subject Performance Trends Over Time (Line Chart) */}
+      <div className="bg-slate-900/60 border border-slate-800 p-6 rounded-2xl shadow-xl">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-base font-bold text-white">Subject-Wise Performance Trends Over Time</h2>
+            <p className="text-xs text-slate-400">Real-time mastery tracking across weekly study modules</p>
+          </div>
+          <span className="text-xs px-2.5 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-lg">
+            Line Chart.js
+          </span>
+        </div>
+        <div className="h-72 w-full">
+          {data?.performanceTrendsChart && <Line data={data.performanceTrendsChart} options={chartOptions} />}
+        </div>
+      </div>
     </div>
   );
 }

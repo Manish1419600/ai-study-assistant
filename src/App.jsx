@@ -17,7 +17,7 @@ import LoginPage from './components/LoginPage';
 
 function AppContent() {
   const { user, isAuthenticated, isAuthModalOpen, setIsAuthModalOpen } = useAuth();
-  const [activeTab, setActiveTab] = useState('progress'); // Default to Dashboard as shown in screenshot
+  const [activeTab, setActiveTab] = useState('planner'); // Original default
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isQuizOpen, setIsQuizOpen] = useState(false);
   const [isAppearanceOpen, setIsAppearanceOpen] = useState(false);
@@ -42,14 +42,13 @@ function AppContent() {
   return (
     <PullToRefresh onRefresh={handleGlobalRefresh}>
       <div
-        className="app-container min-h-screen max-w-[100vw] overflow-x-hidden text-slate-900 dark:text-slate-100 flex flex-col lg:flex-row font-sans"
-        style={{ backgroundColor: 'var(--bg-primary, #F8FAFC)' }}
+        className="app-container min-h-screen max-w-[100vw] overflow-x-hidden text-slate-100 flex flex-col lg:flex-row font-sans"
+        style={{ backgroundColor: 'var(--bg-primary, #070913)' }}
       >
         {/* Desktop Left Sidebar & Mobile Drawer */}
         <Sidebar
           activeTab={activeTab}
           setActiveTab={setActiveTab}
-          onOpenQuiz={() => setIsQuizOpen(true)}
           isSidebarOpen={isSidebarOpen}
           setIsSidebarOpen={setIsSidebarOpen}
         />
@@ -64,8 +63,8 @@ function AppContent() {
             onToggleSidebar={() => setIsSidebarOpen(prev => !prev)}
           />
 
-          {/* Main Content Workspace */}
-          <main className="flex-1 w-full max-w-full overflow-y-auto overflow-x-hidden p-4 sm:p-6 lg:p-8 pb-20 lg:pb-12 bg-[#F8FAFC] dark:bg-[#070913]">
+          {/* Main Content Workspace (Original Tabs) */}
+          <main className="flex-1 w-full max-w-full overflow-y-auto overflow-x-hidden p-3 sm:p-6 pb-20 lg:pb-12">
             {activeTab === 'planner' && (
               <PlannerTab
                 key={`planner-${refreshKey}`}
