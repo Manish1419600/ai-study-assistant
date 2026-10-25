@@ -4,7 +4,7 @@ import { useAuth, API_BASE_URL } from '../context/AuthContext';
 import { Sparkles, Upload, FileText, CheckCircle2, Volume2, Download, Layers, HelpCircle, VolumeX, Trash2, Loader2 } from 'lucide-react';
 
 export default function NotesQuizTab({ onOpenQuiz }) {
-  const { authFetch } = useAuth();
+  const { authFetch, isOnline } = useAuth();
   const [notes, setNotes] = useState([]);
   const [selectedNote, setSelectedNote] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -109,7 +109,7 @@ export default function NotesQuizTab({ onOpenQuiz }) {
         </div>
         <div className="px-3.5 py-1.5 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-emerald-300 text-xs font-bold flex items-center gap-1.5 shadow-sm">
           <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
-          <span>Gemini 3.5 Flash (Live AI)</span>
+          <span>{isOnline ? 'Gemini AI (Cloud)' : 'Offline Academic Engine'}</span>
         </div>
       </div>
 

@@ -1,4 +1,3 @@
-// src/components/LoginPage.jsx - Dedicated Authentication Gate for StudyGenie AI
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import {
@@ -15,11 +14,13 @@ import {
   Eye,
   EyeOff,
   ShieldCheck,
-  AlertCircle
+  AlertCircle,
+  WifiOff,
+  Zap
 } from 'lucide-react';
 
 export default function LoginPage() {
-  const { login, register, loading } = useAuth();
+  const { login, register, continueOffline, isOnline, loading } = useAuth();
   const [isRegisterMode, setIsRegisterMode] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
@@ -143,6 +144,14 @@ export default function LoginPage() {
 
         {/* Main Authentication Card */}
         <div className="glass-card p-5 sm:p-7 rounded-2xl border border-slate-800 bg-[#0E1424]/90 backdrop-blur-xl shadow-2xl space-y-5">
+
+          {/* Offline Banner */}
+          {!isOnline && (
+            <div className="p-3 rounded-xl bg-amber-950/40 border border-amber-500/40 flex items-center gap-2.5 text-amber-300 text-xs font-semibold">
+              <WifiOff className="w-4 h-4 shrink-0 text-amber-400" />
+              <span>Offline Mode Active: All features, notes, quizzes, and AI doubt solver work locally without network.</span>
+            </div>
+          )}
 
           {/* Error Notice */}
           {error && (
@@ -284,6 +293,24 @@ export default function LoginPage() {
                   <ArrowRight className="w-4 h-4" style={{ color: '#FFFFFF' }} />
                 </>
               )}
+            </button>
+
+            {/* Instant Offline Access Button */}
+            <div className="relative flex py-1 items-center">
+              <div className="flex-grow border-t border-slate-700/60"></div>
+              <span className="flex-shrink mx-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                Or Study Anywhere Offline
+              </span>
+              <div className="flex-grow border-t border-slate-700/60"></div>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => continueOffline()}
+              className="w-full py-2.5 px-4 rounded-xl font-bold text-xs sm:text-sm bg-slate-800/90 hover:bg-slate-700/90 border border-slate-600/60 text-cyan-300 hover:text-white transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md"
+            >
+              <Zap className="w-4 h-4 text-cyan-400" />
+              <span>Continue in Offline Mode (No Internet Needed)</span>
             </button>
           </form>
 

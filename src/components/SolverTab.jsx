@@ -23,7 +23,7 @@ import {
 } from 'lucide-react';
 
 export default function SolverTab({ onOpenQuiz, savedNotes, setSavedNotes }) {
-  const { authFetch } = useAuth();
+  const { authFetch, isOnline } = useAuth();
   const [inputText, setInputText] = useState('');
   const [copiedId, setCopiedId] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -271,7 +271,7 @@ export default function SolverTab({ onOpenQuiz, savedNotes, setSavedNotes }) {
           )}
           <div className="hidden sm:flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-emerald-300 text-xs font-bold">
             <Zap className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
-            <span>Auto-FAQ Active</span>
+            <span>{isOnline ? 'Cloud AI + Auto-FAQ' : '100% Offline AI Engine'}</span>
           </div>
         </div>
       </div>

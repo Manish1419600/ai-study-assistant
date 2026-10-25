@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { toggleLightDarkMode, getInitialPrefs } from './AppearancePanel';
 
 export default function Header({ activeTab, setActiveTab, studyHours, onOpenAppearance }) {
-  const { user, isAuthenticated, logout, setIsAuthModalOpen, isSocketConnected } = useAuth();
+  const { user, isAuthenticated, logout, setIsAuthModalOpen, isSocketConnected, isOnline } = useAuth();
   const [isLightMode, setIsLightMode] = useState(() => getInitialPrefs().mode === 'light');
   const [isRefreshing, setIsRefreshing] = useState(false);
 
@@ -74,13 +74,13 @@ export default function Header({ activeTab, setActiveTab, studyHours, onOpenAppe
             <span className="hidden sm:inline-block px-2 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 text-[10px] font-bold whitespace-nowrap tracking-wide">
               v1.0 Live
             </span>
-            <span className={`hidden xl:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold border whitespace-nowrap ${
+            <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold border whitespace-nowrap ${
               isSocketConnected 
                 ? 'bg-emerald-950/80 border-emerald-500/40 text-emerald-300' 
-                : 'bg-amber-950/80 border-amber-500/40 text-amber-300'
+                : 'bg-cyan-950/80 border-cyan-500/40 text-cyan-300'
             }`}>
-              <span className={`w-1.5 h-1.5 rounded-full ${isSocketConnected ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'}`}></span>
-              <span>{isSocketConnected ? 'Backend Live' : 'Connecting...'}</span>
+              <span className={`w-1.5 h-1.5 rounded-full ${isSocketConnected ? 'bg-emerald-400 animate-pulse' : 'bg-cyan-400'}`}></span>
+              <span>{isSocketConnected ? 'Cloud Synced' : (!isOnline ? 'Offline Mode' : 'Offline Ready')}</span>
             </span>
           </h1>
           <p className="text-[10px] sm:text-xs font-semibold text-cyan-400 tracking-wide mt-0.5">
