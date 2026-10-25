@@ -1,7 +1,8 @@
-// src/App.jsx - Main Application Container for StudyGenie
+// src/App.jsx - Main Application Container with Sidebar Layout
 import React, { useState, useEffect } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Header from './components/Header';
+import Sidebar from './components/Sidebar';
 import Navigation from './components/Navigation';
 import PlannerTab from './components/PlannerTab';
 import SolverTab from './components/SolverTab';
@@ -16,7 +17,8 @@ import LoginPage from './components/LoginPage';
 
 function AppContent() {
   const { user, isAuthenticated, isAuthModalOpen, setIsAuthModalOpen } = useAuth();
-  const [activeTab, setActiveTab] = useState('planner');
+  const [activeTab, setActiveTab] = useState('progress'); // Default to Dashboard as shown in screenshot
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isQuizOpen, setIsQuizOpen] = useState(false);
   const [isAppearanceOpen, setIsAppearanceOpen] = useState(false);
   const [studyHours, setStudyHours] = useState(0);
@@ -33,8 +35,6 @@ function AppContent() {
   };
 
   // Enforce Authentication Gate:
-  // If user is not logged in, render the dedicated LoginPage first.
-  // All other FRs (Planner, Solver, Notes, Quizzes, Analytics) unlock only after logging in!
   if (!isAuthenticated || !user) {
     return <LoginPage />;
   }
@@ -42,63 +42,75 @@ function AppContent() {
   return (
     <PullToRefresh onRefresh={handleGlobalRefresh}>
       <div
-        className="app-container min-h-screen max-w-[100vw] overflow-x-hidden text-slate-100 flex flex-col font-sans"
-        style={{ backgroundColor: 'var(--bg-primary, #070913)' }}
+        className="app-container min-h-screen max-w-[100vw] overflow-x-hidden text-slate-900 dark:text-slate-100 flex flex-col lg:flex-row font-sans"
+        style={{ backgroundColor: 'var(--bg-primary, #F8FAFC)' }}
       >
-        {/* Top Header */}
-        <Header
+        {/* Desktop Left Sidebar & Mobile Drawer */}
+        <Sidebar
           activeTab={activeTab}
           setActiveTab={setActiveTab}
-          studyHours={studyHours}
-          onOpenAppearance={() => setIsAppearanceOpen(true)}
+          onOpenQuiz={() => setIsQuizOpen(true)}
+          isSidebarOpen={isSidebarOpen}
+          setIsSidebarOpen={setIsSidebarOpen}
         />
 
-        {/* Main Workspace */}
-        <main className="flex-1 w-full max-w-full overflow-y-auto overflow-x-hidden pb-16 lg:pb-8">
-          {activeTab === 'planner' && (
-            <PlannerTab
-              key={`planner-${refreshKey}`}
-              studyHours={studyHours}
-              setStudyHours={setStudyHours}
-            />
-          )}
-          {activeTab === 'solver' && (
-            <SolverTab
-              key={`solver-${refreshKey}`}
-              onOpenQuiz={() => setIsQuizOpen(true)}
-              savedNotes={savedNotes}
-              setSavedNotes={setSavedNotes}
-            />
-          )}
-          {activeTab === 'notes' && (
-            <NotesQuizTab
-              key={`notes-${refreshKey}`}
-              onOpenQuiz={() => setIsQuizOpen(true)}
-            />
-          )}
-          {activeTab === 'progress' && (
-            <ProgressDashboardTab key={`progress-${refreshKey}`} />
-          )}
-          {activeTab === 'profile' && (
-            <ProfileTab
-              key={`profile-${refreshKey}`}
-              onOpenAppearance={() => setIsAppearanceOpen(true)}
-            />
-          )}
-        </main>
+        {/* Right Main Column: Top Bar + Content */}
+        <div className="flex-1 flex flex-col min-w-0 min-h-screen">
+          <Header
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            studyHours={studyHours}
+            onOpenAppearance={() => setIsAppearanceOpen(true)}
+            onToggleSidebar={() => setIsSidebarOpen(prev => !prev)}
+          />
 
-      {/* Mobile Bottom Nav */}
-      <Navigation activeTab={activeTab} setActiveTab={setActiveTab} />
+          {/* Main Content Workspace */}
+          <main className="flex-1 w-full max-w-full overflow-y-auto overflow-x-hidden p-4 sm:p-6 lg:p-8 pb-20 lg:pb-12 bg-[#F8FAFC] dark:bg-[#070913]">
+            {activeTab === 'planner' && (
+              <PlannerTab
+                key={`planner-${refreshKey}`}
+                studyHours={studyHours}
+                setStudyHours={setStudyHours}
+              />
+            )}
+            {activeTab === 'solver' && (
+              <SolverTab
+                key={`solver-${refreshKey}`}
+                onOpenQuiz={() => setIsQuizOpen(true)}
+                savedNotes={savedNotes}
+                setSavedNotes={setSavedNotes}
+              />
+            )}
+            {activeTab === 'notes' && (
+              <NotesQuizTab
+                key={`notes-${refreshKey}`}
+                onOpenQuiz={() => setIsQuizOpen(true)}
+              />
+            )}
+            {activeTab === 'progress' && (
+              <ProgressDashboardTab key={`progress-${refreshKey}`} />
+            )}
+            {activeTab === 'profile' && (
+              <ProfileTab
+                key={`profile-${refreshKey}`}
+                onOpenAppearance={() => setIsAppearanceOpen(true)}
+              />
+            )}
+          </main>
+        </div>
 
-      {/* Modals */}
-      <QuizModal isOpen={isQuizOpen} onClose={() => setIsQuizOpen(false)} />
-      <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
+        {/* Mobile Bottom Nav */}
+        <Navigation activeTab={activeTab} setActiveTab={setActiveTab} />
 
-      {/* Appearance Panel (slide-in from right) */}
-      <AppearancePanel
-        isOpen={isAppearanceOpen}
-        onClose={() => setIsAppearanceOpen(false)}
-      />
+        {/* Modals */}
+        <QuizModal isOpen={isQuizOpen} onClose={() => setIsQuizOpen(false)} />
+        <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
+
+        {/* Appearance Panel */}
+        <AppearancePanel
+          isOpen={isAppearanceOpen}
+          onClose={() => setIsAppearanceOpen(false)}
+        />
       </div>
     </PullToRefresh>
   );
