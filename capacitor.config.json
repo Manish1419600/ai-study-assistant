@@ -3,7 +3,7 @@
   "appName": "StudyGenie AI",
   "webDir": "dist",
   "server": {
-    "url": "http://10.184.50.108:3000",
+    "androidScheme": "https",
     "cleartext": true,
     "allowNavigation": ["*"]
   },

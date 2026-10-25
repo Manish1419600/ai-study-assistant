@@ -4,19 +4,30 @@ import { io } from 'socket.io-client';
 
 const AuthContext = createContext();
 
+// Production 24/7 Render Cloud Backend for Vercel and standalone Mobile App
 const CLOUD_BACKEND = 'https://study-genie-backend.onrender.com';
 const envBackend = import.meta.env.VITE_BACKEND_URL;
 
-// If running in local web browser or live app on local network, use local backend.
-// Otherwise (production Vercel deployment), connect to 24/7 Render Cloud Backend!
-const isLocalDev = typeof window !== 'undefined' && 
-  (window.location.hostname === 'localhost' || 
-   window.location.hostname === '127.0.0.1' || 
-   window.location.hostname.startsWith('192.168.') || 
-   window.location.hostname.startsWith('10.') || 
-   window.location.hostname.startsWith('172.'));
+// Determine if strictly running in local desktop browser dev:
+const isBrowser = typeof window !== 'undefined';
+const isCapacitor = isBrowser && (
+  !!window.Capacitor?.isNativePlatform?.() ||
+  window.location.protocol === 'capacitor:' ||
+  window.location.protocol === 'ionic:' ||
+  (window.location.hostname === 'localhost' && typeof window.Capacitor !== 'undefined')
+);
+const isVercelOrRemote = isBrowser && (
+  window.location.hostname.includes('vercel.app') ||
+  window.location.hostname.includes('onrender.com') ||
+  window.location.protocol === 'https:'
+);
+const isLocalBrowser = isBrowser && !isCapacitor && !isVercelOrRemote && (
+  window.location.hostname === 'localhost' || 
+  window.location.hostname === '127.0.0.1'
+);
 
-const activeBackend = envBackend || (isLocalDev ? `http://${window.location.hostname}:5000` : CLOUD_BACKEND);
+// In Vercel and Mobile App, ALWAYS use CLOUD_BACKEND
+const activeBackend = envBackend || (isLocalBrowser ? 'http://localhost:5000' : CLOUD_BACKEND);
 
 export const SOCKET_URL = activeBackend.replace(/\/api\/?$/, '');
 export const API_BASE_URL = activeBackend.endsWith('/api') ? activeBackend : `${activeBackend}/api`;
