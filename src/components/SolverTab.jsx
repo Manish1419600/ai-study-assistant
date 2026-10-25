@@ -1,6 +1,7 @@
 // src/components/SolverTab.jsx - Real-Time AI Doubt Solver (FR3 & FR4)
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth, API_BASE_URL } from '../context/AuthContext';
+import { offlineSolver } from '../services/offlineEngine';
 import {
   Sparkles,
   Camera,
@@ -206,25 +207,27 @@ export default function SolverTab({ onOpenQuiz, savedNotes, setSavedNotes }) {
       }
       throw new Error(data.error || 'Server returned invalid response');
     } catch (err) {
-      console.warn('Backend fetch fallback:', err);
-      // Academic intelligent fallback so student is NEVER left stranded
-      const fallbackAiMsg = {
-        id: `ai-${Date.now()}`,
-        sender: 'ai',
-        query: query,
-        model: 'StudyGenie AI',
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        type: 'rich-doubt',
-        title: `Academic Analysis: ${query.slice(0, 36)}`,
-        equation: query.toLowerCase().includes('react') ? '\\text{UI} = f(\\text{state})' : query.toLowerCase().includes('pythagoras') ? 'a^2 + b^2 = c^2' : 'E = mc^2',
-        equationSubtitle: 'Fundamental Conceptual Derivation',
-        explanation: `### Academic Solution for: **"${query}"**\n\n1. **Core Concept Definition**: This topic establishes a systematic relationship between key foundational variables.\n2. **Step-by-Step Breakdown**: When evaluating the problem, verify conservation constraints and boundary conditions.\n3. **Practical Application**: Check edge cases and test with known values for dimensional verification.`,
-        keyPoints: [
-          { title: "Fundamental Principle", text: "Ensure boundary conditions and notation conform to standard scientific convention." },
-          { title: "Analytical Verification", text: "Break composite relationships into elemental, verifiable sub-steps." }
-        ]
-      };
-      setChats((prev) => [...prev, fallbackAiMsg]);
+      console.warn('Backend fetch fallback to offlineSolver:', err);
+      try {
+        const offlineRes = await offlineSolver.solveQuery(query);
+        const fallbackChat = offlineRes?.chat || {};
+        const fallbackAiMsg = {
+          id: fallbackChat.id || `ai-${Date.now()}`,
+          sender: 'ai',
+          query: query,
+          model: fallbackChat.model || 'StudyGenie AI',
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          type: 'rich-doubt',
+          title: fallbackChat.title || `Academic Analysis: ${query.slice(0, 36)}`,
+          equation: fallbackChat.equation || null,
+          equationSubtitle: fallbackChat.equationSubtitle || null,
+          explanation: fallbackChat.explanation || 'Step-by-step resolution provided.',
+          keyPoints: fallbackChat.keyPoints || []
+        };
+        setChats((prev) => [...prev, fallbackAiMsg]);
+      } catch (fallbackErr) {
+        console.error('Offline solver error:', fallbackErr);
+      }
     }
 
     setLoading(false);

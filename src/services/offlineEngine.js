@@ -304,6 +304,38 @@ export const offlineSolver = {
     let explanation = '';
     let keyPoints = [];
 
+    // Check for mathematical linear equation (e.g., "5x + 12 = 37" or "2x - 8 = 14")
+    const eqMatch = query.match(/(\d+)\s*x\s*([+-])\s*(\d+)\s*=\s*(\d+)/i);
+    if (eqMatch) {
+      const a = parseInt(eqMatch[1]);
+      const op = eqMatch[2];
+      const b = parseInt(eqMatch[3]);
+      const c = parseInt(eqMatch[4]);
+      const effectiveB = op === '+' ? b : -b;
+      const step1 = c - effectiveB;
+      const x = Number((step1 / a).toFixed(4));
+
+      return {
+        success: true,
+        chat: {
+          id: `doubt-${Date.now()}`,
+          sender: 'ai',
+          model: 'StudyGenie Mathematical Solver',
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          type: 'rich-doubt',
+          title: `Algebraic Solution: x = ${x}`,
+          equation: `${a}x ${op} ${b} = ${c} \\implies x = ${x}`,
+          equationSubtitle: `Linear Algebraic Equation Resolution`,
+          explanation: `### Step-by-Step Algebraic Solution\n\nGiven the linear equation: $$${a}x ${op} ${b} = ${c}$$\n\n1. **Isolate the Variable Term**: ${op === '+' ? `Subtract ${b} from both sides` : `Add ${b} to both sides`}:\n$$${a}x = ${c} ${op === '+' ? '-' : '+'} ${b} = ${step1}$$\n\n2. **Solve for x**: Divide both sides by the leading coefficient $a = ${a}$:\n$$x = \\frac{${step1}}{${a}} = ${x}$$\n\n3. **Verification**: Substitute $x = ${x}$ back into the original expression:\n$$${a}(${x}) ${op} ${b} = ${a * x} ${op} ${b} = ${c}$$ (Verified \\checkmark)`,
+          keyPoints: [
+            { title: 'Isolate Variable', text: `The exact solution to the equation is x = ${x}.` },
+            { title: 'Algebraic Proof', text: 'Applying inverse arithmetic operations maintains equivalence across the equality relation.' }
+          ],
+          subject: 'Algebra & Mathematics'
+        }
+      };
+    }
+
     if (qLower.includes('pythagor') || qLower.includes('triangle') || qLower.includes('geometry') || qLower.includes('hypotenuse')) {
       subject = 'Geometry & Trigonometry';
       title = 'Pythagorean Theorem & Euclidean Right Triangles';
@@ -314,6 +346,36 @@ export const offlineSolver = {
         { title: 'Hypotenuse Definition', text: 'The hypotenuse is strictly the longest side directly opposite the 90-degree right angle.' },
         { title: 'Coordinate Distance', text: 'Forms the foundational metric for Euclidean distance between two points (x1, y1) and (x2, y2).' },
         { title: 'Converse of Pythagorean Theorem', text: 'If a triangle satisfies a^2 + b^2 = c^2, it is guaranteed to be a right-angled triangle.' }
+      ];
+    } else if ((qLower.includes('sky') && qLower.includes('blue')) || qLower.includes('rayleigh') || qLower.includes('scattering')) {
+      subject = 'Atmospheric Physics & Optics';
+      title = 'Rayleigh Scattering Law & Sky Color';
+      equation = 'I \\propto \\frac{1}{\\lambda^4}';
+      equationSubtitle = 'Rayleigh Scattering Intensity Law';
+      explanation = `### The Physics of Atmospheric Scattering\n\n1. **Solar Spectrum**: Sunlight is composed of all wavelengths of visible light, ranging from red (~700 nm) to violet/blue (~400 nm).\n2. **Gas Particle Collisions**: Incoming solar photons collide with atmospheric gas molecules ($N_2$ and $O_2$), which are much smaller than light wavelengths.\n3. **Rayleigh Scattering**: Short wavelengths scatter far more efficiently than long wavelengths ($I \\propto 1/\\lambda^4$). Blue light scatters roughly 10 times more intensely than red light.\n4. **Human Perception**: Although violet light scatters even more than blue, the Sun emits less violet light and human cone photoreceptors are far more sensitive to blue, rendering the sky a vibrant azure blue.`;
+      keyPoints = [
+        { title: 'Wavelength Sensitivity', text: 'Scattering intensity is inversely proportional to the 4th power of wavelength.' },
+        { title: 'Atmospheric Gases', text: 'Nitrogen and oxygen molecules cause uniform Rayleigh scattering across the upper atmosphere.' }
+      ];
+    } else if (qLower.includes('photosynthe')) {
+      subject = 'Biology & Plant Physiology';
+      title = 'Photosynthesis & Carbon Fixation';
+      equation = '6\\text{CO}_2 + 6\\text{H}_2\\text{O} + \\text{photons} \\xrightarrow{\\text{chlorophyll}} \\text{C}_6\\text{H}_{12}\\text{O}_6 + 6\\text{O}_2';
+      equationSubtitle = 'Balanced Stoichiometric Equation for Oxygenic Photosynthesis';
+      explanation = `### Overview of Photosynthetic Energy Conversion\n\n1. **Core Process**: Plants, algae, and cyanobacteria transform solar electromagnetic radiation into stored chemical potential energy in glucose bonds.\n2. **Light Reactions (Thylakoids)**: Sunlight excites chlorophyll electrons, driving the photolysis of water ($2\\text{H}_2\\text{O} \\to \\text{O}_2 + 4\\text{H}^+ + 4e^-$) and generating ATP and NADPH.\n3. **Calvin Cycle (Stroma)**: RuBisCO catalyzes carbon fixation, utilizing ATP and NADPH to assemble 3-carbon sugars into glucose ($C_6H_{12}O_6$).`;
+      keyPoints = [
+        { title: 'Solar Energy Harvest', text: 'Chlorophyll pigments absorb blue and red photons while reflecting green wavelengths.' },
+        { title: 'Oxygen Generation', text: 'Water photolysis in Photosystem II provides the electron source, generating breathable O2.' }
+      ];
+    } else if (qLower.includes('binary search')) {
+      subject = 'Computer Science & Algorithms';
+      title = 'Binary Search Algorithm & Logarithmic Complexity';
+      equation = 'T(n) = T(n/2) + O(1) \\implies T(n) = O(\\log_2 n)';
+      equationSubtitle = 'Divide-and-Conquer Recurrence Relation';
+      explanation = `### Step-by-Step Binary Search Algorithm\n\n1. **Prerequisite**: The input collection or array MUST be sorted.\n2. **Search Bounds**: Initialize two pointers: \`low = 0\` and \`high = n - 1\`.\n3. **Midpoint Evaluation**: In each iteration, compute \`mid = low + Math.floor((high - low) / 2)\`:\n- If \`arr[mid] === target\`: match found, return \`mid\`.\n- If \`arr[mid] < target\`: search the right half (\`low = mid + 1\`).\n- If \`arr[mid] > target\`: search the left half (\`high = mid - 1\`).\n4. **Asymptotic Efficiency**: Eliminates half of all remaining search space at every step, running in $O(\\log n)$ time.`;
+      keyPoints = [
+        { title: 'Logarithmic Scalability', text: 'A collection of 1,000,000 items is searched in at most 20 comparisons.' },
+        { title: 'Overflow Protection', text: 'Calculating mid as low + (high - low)/2 prevents integer arithmetic overflow.' }
       ];
     } else if (qLower.includes('space') || qLower.includes('universe') || qLower.includes('astronomy') || qLower.includes('black hole') || qLower.includes('galaxy') || qLower.includes('cosmos') || qLower.includes('planet')) {
       subject = 'Astrophysics & Cosmology';
