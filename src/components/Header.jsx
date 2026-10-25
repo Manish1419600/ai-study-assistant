@@ -48,105 +48,115 @@ export default function Header({ activeTab, setActiveTab, studyHours, onOpenAppe
   ];
 
   return (
-    <header className="app-header sticky top-0 z-30 backdrop-blur-xl px-3 sm:px-6 py-2 border-b flex items-center justify-between w-full shadow-sm transition-all duration-200">
+    <header className="app-header sticky top-0 z-30 backdrop-blur-xl px-3 sm:px-6 py-2.5 border-b border-slate-200/80 dark:border-slate-800/80 bg-white/80 dark:bg-[#070913]/85 flex items-center justify-between w-full shadow-sm transition-all duration-200">
 
-      {/* ── Brand & Cloud Status ── */}
+      {/* ── Brand & Cloud Status (Left Side) ── */}
       <div className="flex items-center gap-2.5 sm:gap-3 flex-shrink-0">
-        <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-cyan-400 p-[1.5px] flex items-center justify-center shadow-md shadow-purple-600/20 flex-shrink-0 hover:scale-105 transition-transform">
-          <div className="w-full h-full bg-[#0E1322] rounded-[10px] flex items-center justify-center">
-            <Hexagon className="w-5 h-5 text-cyan-400 fill-cyan-400/20" />
+        <button
+          onClick={() => setActiveTab('planner')}
+          className="flex items-center gap-2.5 sm:gap-3 group cursor-pointer text-left focus:outline-none"
+        >
+          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-cyan-400 p-[1.5px] flex items-center justify-center shadow-md shadow-purple-600/20 flex-shrink-0 group-hover:scale-105 transition-transform duration-200">
+            <div className="w-full h-full bg-[#0E1322] rounded-[10px] flex items-center justify-center">
+              <Hexagon className="w-5 h-5 text-cyan-400 fill-cyan-400/20 group-hover:rotate-12 transition-transform duration-300" />
+            </div>
           </div>
-        </div>
 
-        <div className="flex flex-col">
-          <div className="flex items-center gap-2">
-            <h1 className="text-sm sm:text-base font-extrabold tracking-tight leading-none text-slate-900 dark:text-white">
-              StudyGenie<span className="text-cyan-400 ml-1">AI</span>
-            </h1>
+          <div className="flex flex-col">
+            <div className="flex items-center gap-2">
+              <h1 className="text-sm sm:text-base font-extrabold tracking-tight leading-none text-slate-900 dark:text-white">
+                StudyGenie<span className="text-cyan-400 ml-0.5">AI</span>
+              </h1>
 
-            {/* Subtle Status Pill */}
-            <span
-              className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold border transition-colors ${
-                isSocketConnected
-                  ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-600 dark:text-emerald-400'
-                  : !isOnline
-                  ? 'bg-amber-500/10 border-amber-500/30 text-amber-600 dark:text-amber-400'
-                  : 'bg-cyan-500/10 border-cyan-500/30 text-cyan-600 dark:text-cyan-400'
-              }`}
-            >
+              {/* Subtle Status Pill */}
               <span
-                className={`w-1.5 h-1.5 rounded-full ${
-                  isSocketConnected ? 'bg-emerald-500 animate-pulse' : !isOnline ? 'bg-amber-500' : 'bg-cyan-500'
+                className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold border transition-colors ${
+                  isSocketConnected
+                    ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-600 dark:text-emerald-400'
+                    : !isOnline
+                    ? 'bg-amber-500/10 border-amber-500/30 text-amber-600 dark:text-amber-400'
+                    : 'bg-cyan-500/10 border-cyan-500/30 text-cyan-600 dark:text-cyan-400'
                 }`}
-              />
-              <span>{isSocketConnected ? 'Cloud Synced' : (!isOnline ? 'Offline' : 'Ready')}</span>
+              >
+                <span
+                  className={`w-1.5 h-1.5 rounded-full ${
+                    isSocketConnected ? 'bg-emerald-500 animate-pulse' : !isOnline ? 'bg-amber-500' : 'bg-cyan-500'
+                  }`}
+                />
+                <span>{isSocketConnected ? 'Cloud Synced' : (!isOnline ? 'Offline' : 'Ready')}</span>
+              </span>
+            </div>
+
+            <span className="text-[10px] font-medium text-slate-500 dark:text-slate-400 tracking-wide mt-0.5 hidden sm:inline">
+              Intelligent Academic Workspace
             </span>
           </div>
-
-          <span className="text-[10px] font-medium text-slate-500 dark:text-slate-400 tracking-wide mt-0.5 hidden sm:inline">
-            Intelligent Academic Workspace
-          </span>
-        </div>
+        </button>
       </div>
 
-      {/* ── Modern Floating Segmented Navigation Bar (Desktop) ── */}
-      <nav
-        aria-label="Main Navigation"
-        className="hidden lg:flex items-center gap-1 p-1 rounded-full border shadow-inner transition-colors"
-        style={{
-          backgroundColor: isLightMode ? '#F1F5F9' : 'rgba(15, 23, 42, 0.75)',
-          borderColor: isLightMode ? '#E2E8F0' : 'rgba(51, 65, 85, 0.5)'
-        }}
-      >
-        {navItems.map((item) => {
-          const Icon = item.icon;
-          const isActive = activeTab === item.id;
-          return (
-            <button
-              key={item.id}
-              onClick={() => setActiveTab(item.id)}
-              className={`px-3.5 py-1.5 rounded-full font-bold transition-all flex items-center gap-2 cursor-pointer text-xs xl:text-sm whitespace-nowrap select-none ${
-                isActive
-                  ? 'text-white shadow-md'
-                  : isLightMode
-                  ? 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/70'
-                  : 'text-slate-400 hover:text-white hover:bg-slate-800/70'
-              }`}
-              style={
-                isActive
-                  ? {
-                      background: 'linear-gradient(135deg, #7C3AED 0%, #4F46E5 100%)',
-                      boxShadow: '0 2px 10px rgba(124, 58, 237, 0.35)'
-                    }
-                  : undefined
-              }
-            >
-              <Icon className="w-4 h-4 flex-shrink-0" />
-              <span>{item.label}</span>
-              {item.badge && (
-                <span
-                  className={`px-1.5 py-0.2 rounded-full font-extrabold text-[9px] uppercase tracking-wider ${
-                    isActive
-                      ? 'bg-white/20 text-white'
-                      : 'bg-purple-500/15 text-purple-600 dark:text-cyan-400 border border-purple-500/20'
-                  }`}
-                >
-                  {item.badge}
-                </span>
-              )}
-            </button>
-          );
-        })}
-      </nav>
+      {/* ── Right Section: Modern Navigation + Utilities + User Profile ── */}
+      <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
 
-      {/* ── Right Actions & Utilities (Refined & Clean) ── */}
-      <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+        {/* ── Modern Right-Aligned Segmented Navigation (Desktop) ── */}
+        <nav
+          aria-label="Main Navigation"
+          className="hidden lg:flex items-center gap-1 p-1 rounded-full border shadow-inner transition-colors"
+          style={{
+            backgroundColor: isLightMode ? '#F1F5F9' : 'rgba(15, 23, 42, 0.75)',
+            borderColor: isLightMode ? '#E2E8F0' : 'rgba(51, 65, 85, 0.5)'
+          }}
+        >
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            const isActive = activeTab === item.id;
+            return (
+              <button
+                key={item.id}
+                onClick={() => setActiveTab(item.id)}
+                className={`relative px-3.5 py-1.5 rounded-full font-bold transition-all duration-200 flex items-center gap-1.5 cursor-pointer text-xs xl:text-sm whitespace-nowrap select-none ${
+                  isActive
+                    ? 'text-white shadow-md'
+                    : isLightMode
+                    ? 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/70'
+                    : 'text-slate-400 hover:text-white hover:bg-slate-800/70'
+                }`}
+                style={
+                  isActive
+                    ? {
+                        background: 'linear-gradient(135deg, #7C3AED 0%, #4F46E5 100%)',
+                        boxShadow: '0 2px 10px rgba(124, 58, 237, 0.35)'
+                      }
+                    : undefined
+                }
+              >
+                <Icon className={`w-4 h-4 flex-shrink-0 transition-transform ${isActive ? 'scale-105' : ''}`} />
+                <span>{item.label}</span>
+                {item.badge && (
+                  <span
+                    className={`px-1.5 py-0.5 rounded-full font-extrabold text-[9px] uppercase tracking-wider leading-none ${
+                      isActive
+                        ? 'bg-white/20 text-white'
+                        : 'bg-purple-500/15 text-purple-600 dark:text-cyan-400 border border-purple-500/20'
+                    }`}
+                  >
+                    {item.badge}
+                  </span>
+                )}
+              </button>
+            );
+          })}
+        </nav>
+
+        {/* Vertical Divider between Navigation & Utilities */}
+        <div className="hidden lg:block w-px h-6 bg-slate-300 dark:bg-slate-700/60 flex-shrink-0" />
 
         {/* Study Time Chip - Desktop only */}
-        <div className="hidden xl:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 text-xs font-bold text-slate-700 dark:text-slate-200">
-          <Clock className="w-3.5 h-3.5 text-cyan-500 dark:text-cyan-400" />
-          <span>{studyHours || 0}h Studied</span>
-        </div>
+        {studyHours > 0 && (
+          <div className="hidden 2xl:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 text-xs font-bold text-slate-700 dark:text-slate-200">
+            <Clock className="w-3.5 h-3.5 text-cyan-500 dark:text-cyan-400" />
+            <span>{studyHours}h Studied</span>
+          </div>
+        )}
 
         {/* Unified Icon Toolbar */}
         <div
@@ -207,7 +217,7 @@ export default function Header({ activeTab, setActiveTab, studyHours, onOpenAppe
             <button
               onClick={() => setActiveTab('profile')}
               title="View Profile & Settings"
-              className="flex items-center gap-2 pl-2.5 pr-1 py-1 rounded-full border transition-all cursor-pointer shadow-sm hover:border-purple-500/50"
+              className="flex items-center gap-2 pl-2.5 pr-1 py-1 rounded-full border transition-all cursor-pointer shadow-sm hover:border-purple-500/50 hover:shadow-purple-500/10"
               style={{
                 backgroundColor: isLightMode ? '#FFFFFF' : 'rgba(15, 23, 42, 0.85)',
                 borderColor: isLightMode ? '#CBD5E1' : 'rgba(51, 65, 85, 0.6)'
