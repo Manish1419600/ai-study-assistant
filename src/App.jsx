@@ -53,8 +53,8 @@ function AppContent() {
           setIsSidebarOpen={setIsSidebarOpen}
         />
 
-        {/* Right Main Column: Top Bar + Content */}
-        <div className="flex-1 flex flex-col min-w-0 min-h-screen">
+        {/* Right Main Column: Top Bar + Content (Offset by lg:pl-64 for fixed sidebar) */}
+        <div className="flex-1 flex flex-col min-w-0 min-h-screen lg:pl-64">
           <Header
             activeTab={activeTab}
             setActiveTab={setActiveTab}

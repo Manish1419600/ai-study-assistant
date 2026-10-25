@@ -123,8 +123,8 @@ export default function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsS
 
   return (
     <>
-      {/* Desktop Sticky Left Sidebar */}
-      <aside className="hidden lg:block w-64 h-screen sticky top-0 flex-shrink-0 z-30">
+      {/* Desktop Fixed Left Sidebar */}
+      <aside className="hidden lg:flex flex-col w-64 h-screen fixed top-0 left-0 z-30">
         {sidebarContent}
       </aside>
 
