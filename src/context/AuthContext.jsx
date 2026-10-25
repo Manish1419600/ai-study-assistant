@@ -264,9 +264,9 @@ export function AuthProvider({ children }) {
     }
 
     try {
-      // 4-second timeout to avoid hanging when network is poor or dead
+      // 25-second timeout to allow cloud AI models (Gemini) and cold-starts to respond
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 4000);
+      const timeoutId = setTimeout(() => controller.abort(), 25000);
 
       const response = await fetch(url, {
         ...options,

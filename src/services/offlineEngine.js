@@ -304,7 +304,50 @@ export const offlineSolver = {
     let explanation = '';
     let keyPoints = [];
 
-    if (qLower.includes('calculus') || qLower.includes('derivative') || qLower.includes('integral') || qLower.includes('limit') || qLower.includes('differentiat')) {
+    if (qLower.includes('pythagor') || qLower.includes('triangle') || qLower.includes('geometry') || qLower.includes('hypotenuse')) {
+      subject = 'Geometry & Trigonometry';
+      title = 'Pythagorean Theorem & Euclidean Right Triangles';
+      equation = 'a^2 + b^2 = c^2 \\iff c = \\sqrt{a^2 + b^2}';
+      equationSubtitle = 'Pythagorean Geometric Relation for Right-Angled Triangles';
+      explanation = `### Geometric Resolution for: **"${query}"**\n\n1. **Core Principle**: In any Euclidean right-angled triangle, the area of the square whose side is the hypotenuse ($c$) is equal to the sum of the areas of the squares on the other two legs ($a$ and $b$).\n2. **Algebraic Formula**: $$a^2 + b^2 = c^2$$\n- **Hypotenuse**: $c = \\sqrt{a^2 + b^2}$\n- **Adjacent Leg**: $a = \\sqrt{c^2 - b^2}$\n- **Opposite Leg**: $b = \\sqrt{c^2 - a^2}$\n3. **Practical Verification (Pythagorean Triples)**:\n- For legs $a = 3$ and $b = 4$: $c = \\sqrt{3^2 + 4^2} = \\sqrt{9 + 16} = \\sqrt{25} = 5$.\n- For legs $a = 5$ and $b = 12$: $c = \\sqrt{25 + 144} = \\sqrt{169} = 13$.\n4. **Generalization**: In non-right triangles, this generalizes to the Law of Cosines: $c^2 = a^2 + b^2 - 2ab\\cos(C)$.`;
+      keyPoints = [
+        { title: 'Hypotenuse Definition', text: 'The hypotenuse is strictly the longest side directly opposite the 90-degree right angle.' },
+        { title: 'Coordinate Distance', text: 'Forms the foundational metric for Euclidean distance between two points (x1, y1) and (x2, y2).' },
+        { title: 'Converse of Pythagorean Theorem', text: 'If a triangle satisfies a^2 + b^2 = c^2, it is guaranteed to be a right-angled triangle.' }
+      ];
+    } else if (qLower.includes('space') || qLower.includes('universe') || qLower.includes('astronomy') || qLower.includes('black hole') || qLower.includes('galaxy') || qLower.includes('cosmos') || qLower.includes('planet')) {
+      subject = 'Astrophysics & Cosmology';
+      title = 'Spacetime Curvature & Cosmic Metric Expansion';
+      equation = 'ds^2 = -c^2\\left(1 - \\frac{2GM}{rc^2}\\right)dt^2 + \\left(1 - \\frac{2GM}{rc^2}\\right)^{-1}dr^2 + r^2 d\\Omega^2';
+      equationSubtitle = 'General Relativity & Schwarzschild Geometry';
+      explanation = `### Comprehensive Overview of Outer Space & The Cosmos\n\n**Outer Space** is the continuous physical fabric known as **spacetime**.\n\n1. **General Relativity**: Mass and energy curve 4D spacetime. Objects in free fall travel along natural geodesics within this curved geometry.\n2. **Cosmic Energy Budget**:\n- **Dark Energy (~68.3%)**: A uniform vacuum pressure accelerating metric expansion.\n- **Dark Matter (~26.8%)**: Gravitational scaffolding holding galaxies together.\n- **Baryonic Matter (~4.9%)**: Stars, planets, interstellar gas, and living organisms.\n3. **Hubble's Law**: The universe expands homogeneously according to $v = H_0 \\cdot d$.`;
+      keyPoints = [
+        { title: 'Dynamic Spacetime', text: 'Space is flexible, stretching and vibrating as gravitational waves propagate at the speed of light.' },
+        { title: 'Dark Energy Dominance', text: 'Over 95% of the total energy density of the cosmos consists of Dark Energy and Dark Matter.' },
+        { title: 'The Quantum Vacuum', text: 'Outer space contains continuous zero-point quantum field fluctuations and 2.73K CMB radiation.' }
+      ];
+    } else if (qLower.includes('java') || qLower.includes('jvm') || qLower.includes('bytecode') || qLower.includes('oop') || qLower.includes('spring') || qLower.includes('servlet')) {
+      subject = 'Java & Software Architecture';
+      title = 'JVM Runtime Architecture & Object-Oriented Design';
+      equation = '\\text{Java Source (.java)} \\xrightarrow{\\text{javac}} \\text{Bytecode (.class)} \\xrightarrow{\\text{JVM}} \\text{Native Machine Code}';
+      equationSubtitle = 'JVM Execution Pipeline & "Write Once, Run Anywhere" Architecture';
+      explanation = `### Academic Analysis of Java & The JVM Platform\n\n1. **Platform Independence**: Source code compiles into architecture-neutral Bytecode (.class), which runs on any JVM.\n2. **Four Pillars of OOP**:\n- **Encapsulation**: Hiding state with private fields and exposing vetted public methods.\n- **Inheritance**: Code reusability and hierarchy via \`extends\`.\n- **Polymorphism**: Dynamic method dispatch and method overloading.\n- **Abstraction**: Concealing implementation details behind Interfaces (\`implements\`).\n3. **Memory Management**: The JVM allocates method execution frames on the Stack, while all instantiated objects live in Heap memory managed by automated Garbage Collection (G1GC).`;
+      keyPoints = [
+        { title: 'Bytecode & JIT Compilation', text: 'The HotSpot JIT compiler compiles frequently executed bytecode loops into native machine instructions at runtime.' },
+        { title: 'Automated Garbage Collection', text: 'Reclaims orphaned Heap memory automatically, preventing memory leaks and segmentation faults.' },
+        { title: 'Strong Static Typing', text: 'Compile-time type checking and exception handling ensure resilient enterprise software architectures.' }
+      ];
+    } else if (qLower.includes('python') || qLower.includes('django') || qLower.includes('flask')) {
+      subject = 'Python Programming';
+      title = 'Python Dynamic Typing, CPython & Execution Model';
+      equation = '\\text{Python (.py)} \\xrightarrow{\\text{Parser}} \\text{Bytecode (.pyc)} \\xrightarrow{\\text{PVM + GIL}} \\text{Execution Engine}';
+      equationSubtitle = 'CPython Runtime, Global Interpreter Lock (GIL) & Bytecode';
+      explanation = `### Analysis of Python Language & Runtime\n\n1. **Interpreted & Dynamic**: Types are bound to objects at runtime rather than variable names.\n2. **Memory Model**: Utilizes reference counting with a generational cyclic garbage collector.\n3. **Global Interpreter Lock (GIL)**: Mutex ensuring thread-safe reference counting in CPython.`;
+      keyPoints = [
+        { title: 'Dynamic Typing', text: 'Variables are pointers to typed objects dynamically evaluated at runtime.' },
+        { title: 'Rich Standard Library', text: 'Extensive ecosystem powering modern AI, Machine Learning, and Data Science.' }
+      ];
+    } else if (qLower.includes('calculus') || qLower.includes('derivative') || qLower.includes('integral') || qLower.includes('limit') || qLower.includes('differentiat')) {
       subject = 'Calculus & Analysis';
       title = 'Differential & Integral Calculus Derivation';
       equation = '\\int_{a}^{b} f(x) dx = F(b) - F(a)';
@@ -326,15 +369,14 @@ export const offlineSolver = {
         { title: 'Geometric Multiplicity', text: 'The dimension of the nullspace of (A - λI) gives the number of linearly independent eigenvectors.' },
         { title: 'Diagonalizability', text: 'A is diagonalizable if and only if algebraic multiplicity equals geometric multiplicity for all eigenvalues.' }
       ];
-    } else if (qLower.includes('physics') || qLower.includes('force') || qLower.includes('gravity') || qLower.includes('velocity') || qLower.includes('energy') || qLower.includes('quantum') || qLower.includes('magnetic') || qLower.includes('electric')) {
+    } else if (qLower.includes('physics') || qLower.includes('force') || qLower.includes('gravity') || qLower.includes('velocity') || qLower.includes('energy') || qLower.includes('quantum') || qLower.includes('magnetic') || qLower.includes('electric') || qLower.includes('newton')) {
       subject = 'Physics & Dynamics';
       title = 'Fundamental Physical Laws & Field Derivation';
-      equation = '\\nabla \\times \\mathbf{E} = -\\frac{\\partial \\mathbf{B}}{\\partial t}, \\quad \\nabla \\cdot \\mathbf{B} = 0';
-      equationSubtitle = 'Maxwell-Faraday Electromagnetic Induction';
-      explanation = `### Physical Analysis for: **"${query}"**\n\n1. **Conservation Laws**: Physical systems strictly obey energy conservation, linear/angular momentum conservation, and gauge symmetries.\n2. **Equation Formulation**: Formulate free-body dynamics or field fluxes by isolating the system boundary.\n3. **Dimensional Consistency**: Validate that units across both sides of the derived expression match rigorously ($[M L T^{-2}]$ for forces, $[M L^2 T^{-2}]$ for energy).`;
+      equation = '\\mathbf{F}_{\\text{net}} = m\\mathbf{a} \\quad \\text{and} \\quad E = \\frac{1}{2}mv^2 + mgh';
+      equationSubtitle = 'Newton\'s Second Law & Conservation of Mechanical Energy';
+      explanation = `### Physical Analysis for: **"${query}"**\n\n1. **Conservation Laws**: Physical systems strictly obey energy conservation, linear/angular momentum conservation, and boundary constraints.\n2. **Equation Formulation**: Formulate free-body dynamics by isolating the system boundary: $\\mathbf{F}_{\\text{net}} = m\\mathbf{a}$.\n3. **Dimensional Consistency**: Validate that units across both sides of the derived expression match rigorously ($[M L T^{-2}]$ for forces).`;
       keyPoints = [
-        { title: 'Newtonian & Relativistic Invariance', text: 'Verify if particle velocity approaches c before adopting classical approximations.' },
-        { title: 'Field Flux Integration', text: 'Use symmetry (Gaussian cylinders/spheres or Ampere loops) to simplify complex flux integrals.' },
+        { title: 'Newtonian Dynamics', text: 'Net external force creates proportional acceleration inversely related to inertial mass.' },
         { title: 'Energy Equilibrium', text: 'Total mechanical energy E = K + U remains constant in conservative potential fields.' }
       ];
     } else if (qLower.includes('data structure') || qLower.includes('algorithm') || qLower.includes('tree') || qLower.includes('graph') || qLower.includes('sort') || qLower.includes('complexity') || qLower.includes('hash') || qLower.includes('binary')) {
@@ -359,16 +401,38 @@ export const offlineSolver = {
         { title: 'Transition State Theory', text: 'Catalysts lower the free energy of activation without altering standard free energy ΔG°.' },
         { title: 'Stoichiometric Balancing', text: 'Preserve mass and charge balance across all half-reactions.' }
       ];
-    } else {
-      subject = 'Academic Problem Solving';
-      title = `Academic Solution: ${query.slice(0, 36)}`;
-      equation = 'f(x) = \\sum_{n=0}^{\\infty} \\frac{f^{(n)}(a)}{n!} (x - a)^n';
-      equationSubtitle = 'Taylor Series Analytical Expansion';
-      explanation = `### Structured Solution for: **"${query}"**\n\n1. **Core Concept Definition**: This inquiry centers around systematic principles of academic analysis and verification.\n2. **Step-by-Step Resolution**: Break composite components into elemental, verifiable sub-steps while observing governing boundary constraints.\n3. **Practical Application**: Verify with known edge cases and standard test values for structural validity.`;
+    } else if (qLower.includes('biology') || qLower.includes('cell') || qLower.includes('photosynthe') || qLower.includes('dna') || qLower.includes('rna') || qLower.includes('gene')) {
+      subject = 'Biology & Genetics';
+      title = 'Cellular Biology & Molecular Genetics';
+      equation = '6\\text{CO}_2 + 6\\text{H}_2\\text{O} \\xrightarrow{\\text{Photons, Chlorophyll}} \\text{C}_6\\text{H}_{12}\\text{O}_6 + 6\\text{O}_2';
+      equationSubtitle = 'Biochemical Photosynthesis & Metabolic Energy Synthesis';
+      explanation = `### Biological Mechanisms for: **"${query}"**\n\n1. **Cellular Energy Production**: Sunlight photons excite electrons in Photosystem II, driving photophosphorylation to synthesize ATP and NADPH.\n2. **Molecular Genetics**: DNA transcribes into mRNA within the cell nucleus, which is then translated by ribosomes into functional protein structures.\n3. **Homeostasis**: Biological systems employ negative feedback loops to regulate internal cellular equilibrium.`;
       keyPoints = [
-        { title: 'Foundational Theory', text: 'Grounded in formal scientific principles and rigorous systematic methodology.' },
-        { title: 'Analytical Decomposition', text: 'Deconstruct complex multi-variable problems into self-contained sub-units.' },
-        { title: 'Empirical Verification', text: 'Test against known baseline scenarios to validate predictive accuracy.' }
+        { title: 'ATP Synthesis', text: 'Chemiosmosis across membranes generates ATP via ATP Synthase enzyme complexes.' },
+        { title: 'Genetic Code Conservation', text: 'Universal triplet codon sequences direct precise amino acid polypeptide chain synthesis.' }
+      ];
+    } else if (qLower.includes('taylor')) {
+      subject = 'Calculus & Mathematical Analysis';
+      title = 'Taylor Series Analytical Expansion';
+      equation = 'f(x) = \\sum_{n=0}^{\\infty} \\frac{f^{(n)}(a)}{n!} (x - a)^n';
+      equationSubtitle = 'Taylor & Maclaurin Polynomial Approximation';
+      explanation = `### Mathematical Derivation for: **"${query}"**\n\n1. **Taylor Theorem**: Represents an infinitely differentiable function $f(x)$ as a power series centered at $x = a$.\n2. **Truncation & Error**: The remainder term $R_n(x)$ (Lagrange error bound) quantifies polynomial convergence.\n3. **Maclaurin Form**: When centered at $a = 0$, the series simplifies to the standard Maclaurin expansion.`;
+      keyPoints = [
+        { title: 'Radius of Convergence', text: 'Evaluate convergence via the Ratio Test: L = lim |a_{n+1}/a_n| < 1.' },
+        { title: 'Polynomial Approximation', text: 'Higher-order derivative terms provide increasingly accurate local function approximation.' }
+      ];
+    } else {
+      // Dynamic topic-specific solution for ANY other question
+      const cleanTopic = query.replace(/(explain|what is|how does|define|describe|solve|tell me about)\s*/gi, '').trim() || query;
+      subject = 'Academic Problem Solving';
+      title = `Conceptual Breakdown: ${cleanTopic.slice(0, 36)}`;
+      equation = '\\text{Subject Model: } \\mathbf{' + cleanTopic.slice(0, 18).replace(/[^a-zA-Z0-9 ]/g, '') + '} \\iff \\text{Fundamental Axioms}';
+      equationSubtitle = `Governing Academic Principles: ${cleanTopic.slice(0, 35)}`;
+      explanation = `### Academic Analysis for: **"${cleanTopic}"**\n\n1. **Core Concept Definition**: **${cleanTopic}** is a foundational topic in its respective academic discipline. It defines systematic principles, operational rules, and verified methodologies.\n2. **Key Theoretical Framework**: To analyze ${cleanTopic}, deconstruct the problem into governing relationships, variable parameters, and boundary conditions.\n3. **Application & Verification**: Test assumptions against verified test cases and evaluate edge conditions to guarantee mathematical and empirical consistency.`;
+      keyPoints = [
+        { title: 'Operational Definition', text: `Clarify the defining criteria and initial parameters governing ${cleanTopic}.` },
+        { title: 'Systematic Decomposition', text: 'Break multi-variable challenges into verifiable sub-steps to ensure rigorous analytical validity.' },
+        { title: 'Domain Verification', text: 'Verify physical dimensions, logical consistency, and empirical boundaries.' }
       ];
     }
 
@@ -470,6 +534,96 @@ export const offlineNotes = {
 // 5. OFFLINE QUIZ GENERATOR & EVALUATOR
 // ─────────────────────────────────────────────────────────────
 const QUESTION_BANK = {
+  pythagoras: [
+    {
+      question: "What is the algebraic formulation of the Pythagorean Theorem for a right triangle with legs a, b and hypotenuse c?",
+      options: ["a^2 + b^2 = c^2", "a + b = c", "a^2 - b^2 = c^2", "a * b = c^2 / 2"],
+      correctAnswer: 0,
+      explanation: "In Euclidean geometry, the Pythagorean theorem establishes that the sum of the squares of the legs equals the square of the hypotenuse: a^2 + b^2 = c^2."
+    },
+    {
+      question: "In a right-angled triangle with legs of lengths 3 and 4, what is the length of the hypotenuse c?",
+      options: ["5", "7", "6", "25"],
+      correctAnswer: 0,
+      explanation: "c = sqrt(3^2 + 4^2) = sqrt(9 + 16) = sqrt(25) = 5."
+    },
+    {
+      question: "Which of the following integer sets forms a valid Pythagorean Triple?",
+      options: ["5, 12, 13", "3, 5, 7", "4, 6, 8", "2, 3, 4"],
+      correctAnswer: 0,
+      explanation: "5^2 + 12^2 = 25 + 144 = 169 = 13^2, confirming a valid right triangle."
+    },
+    {
+      question: "If a triangle has sides satisfying a^2 + b^2 < c^2, what classification of triangle is it?",
+      options: ["Obtuse triangle", "Acute triangle", "Right triangle", "Equilateral triangle"],
+      correctAnswer: 0,
+      explanation: "When c^2 > a^2 + b^2, the angle opposite side c is greater than 90 degrees, making the triangle obtuse."
+    }
+  ],
+  space: [
+    {
+      question: "According to modern cosmological consensus, what constitutes approximately 68% of the total energy density of the universe?",
+      options: ["Dark Energy", "Dark Matter", "Intergalactic Hydrogen Gas", "Luminous Stellar Matter"],
+      correctAnswer: 0,
+      explanation: "Dark Energy accounts for approximately 68.3% of the universe's total energy density and accelerates cosmic metric expansion."
+    },
+    {
+      question: "What does Einstein's General Theory of Relativity describe gravity as?",
+      options: [
+        "The geometric curvature of 4D spacetime caused by mass and energy",
+        "An instantaneous Newtonian attractive force mediated by gravitons",
+        "An electromagnetic dipole interaction between planetary cores",
+        "A consequence of atmospheric pressure differentials"
+      ],
+      correctAnswer: 0,
+      explanation: "General Relativity establishes that mass and energy warp spacetime, and objects freely fall along geodesics."
+    },
+    {
+      question: "What is the boundary surrounding a black hole beyond which neither light nor matter can escape?",
+      options: ["The Event Horizon", "The Accretion Disk", "The Photosphere", "The Roche Limit"],
+      correctAnswer: 0,
+      explanation: "The Event Horizon is the critical radius where escape velocity equals the speed of light."
+    }
+  ],
+  java: [
+    {
+      question: "Which component executes architecture-neutral Java bytecode into native machine code at runtime?",
+      options: [
+        "Java Virtual Machine (JVM) with JIT Compiler",
+        "Java Development Kit (JDK) javac compiler",
+        "Host Operating System Kernel",
+        "Application Server Servlet Container"
+      ],
+      correctAnswer: 0,
+      explanation: "The JVM's Just-In-Time (JIT) compiler compiles frequently executed bytecode instructions into native CPU instructions."
+    },
+    {
+      question: "Where are object instances and arrays allocated in the Java memory runtime model?",
+      options: ["Heap Memory", "Stack Memory", "Program Counter (PC) Register", "Native Method Stack"],
+      correctAnswer: 0,
+      explanation: "All Java objects and arrays are dynamically allocated on the shared Heap and managed by the Garbage Collector."
+    },
+    {
+      question: "Which OOP concept is demonstrated by declaring class fields 'private' and providing 'public' getter and setter methods?",
+      options: ["Encapsulation", "Polymorphism", "Multiple Inheritance", "Dynamic Dispatch"],
+      correctAnswer: 0,
+      explanation: "Encapsulation hides the internal state of an object and enforces controlled access through public methods."
+    }
+  ],
+  python: [
+    {
+      question: "What mechanism in CPython prevents multiple native OS threads from executing Python bytecodes simultaneously?",
+      options: ["Global Interpreter Lock (GIL)", "Thread Local Storage (TLS)", "Dynamic Dispatch Engine", "Cyclic Garbage Collector"],
+      correctAnswer: 0,
+      explanation: "CPython uses the GIL to synchronize memory management and prevent race conditions in reference-counting."
+    },
+    {
+      question: "Which of the following data types in Python is IMMUTABLE?",
+      options: ["Tuple (tuple)", "List (list)", "Dictionary (dict)", "Set (set)"],
+      correctAnswer: 0,
+      explanation: "Tuples, strings, and integers are immutable in Python; their contents cannot be modified in place after creation."
+    }
+  ],
   mathematics: [
     {
       question: "What is the derivative of f(x) = ln(3x^2 + 1)?",
@@ -479,14 +633,14 @@ const QUESTION_BANK = {
     },
     {
       question: "Which of the following matrices has an inverse?",
-      options: ["[[1, 2], [2, 4]]", "[[2, 1], [1, 2]]", "[[0, 0], [1, 3]]", "[[3, 6], [1, 2]]"],
-      correctAnswer: 1,
+      options: ["[[2, 1], [1, 2]]", "[[1, 2], [2, 4]]", "[[0, 0], [1, 3]]", "[[3, 6], [1, 2]]"],
+      correctAnswer: 0,
       explanation: "A square matrix is invertible if and only if det(A) ≠ 0. For [[2,1],[1,2]], det = (2*2) - (1*1) = 3 ≠ 0."
     },
     {
       question: "What is the value of lim(x -> 0) of sin(5x) / x?",
-      options: ["0", "1", "5", "Undefined"],
-      correctAnswer: 2,
+      options: ["5", "0", "1", "Undefined"],
+      correctAnswer: 0,
       explanation: "Using the standard limit lim(u -> 0) sin(u)/u = 1: lim(x -> 0) 5 * [sin(5x) / 5x] = 5 * 1 = 5."
     }
   ],
@@ -494,12 +648,12 @@ const QUESTION_BANK = {
     {
       question: "According to Faradays Law, what does an induced electromotive force (EMF) depend upon?",
       options: [
-        "The constant magnitude of magnetic field",
         "The time rate of change of magnetic flux",
+        "The constant magnitude of magnetic field",
         "The total electrical resistance of the wire only",
         "The speed of light in vacuum"
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
       explanation: "Faradays Law states that EMF = -dPhi_B / dt, proportional to the time rate of change of magnetic flux."
     },
     {
@@ -507,56 +661,95 @@ const QUESTION_BANK = {
       options: ["Zero", "Positive and equal to kinetic energy", "Negative", "Depends on radius"],
       correctAnswer: 0,
       explanation: "Work = F * d * cos(theta). Centripetal force acts perpendicular to instantaneous displacement (theta = 90 deg, cos 90 = 0), so work is always zero."
-    },
-    {
-      question: "What is the kinetic energy of a mass m moving at non-relativistic velocity v?",
-      options: ["m * v", "(1/2) * m * v^2", "m * g * h", "m * v^2"],
-      correctAnswer: 1,
-      explanation: "Classical kinetic energy is defined as (1/2) m v^2."
     }
   ],
   computer_science: [
     {
       question: "What is the average time complexity of searching in a Balanced Binary Search Tree (AVL / Red-Black)?",
-      options: ["O(1)", "O(log n)", "O(n)", "O(n log n)"],
-      correctAnswer: 1,
+      options: ["O(log n)", "O(1)", "O(n)", "O(n log n)"],
+      correctAnswer: 0,
       explanation: "Because the tree height is guaranteed to be bounded by O(log n), lookup takes O(log n) time."
     },
     {
       question: "Which data structure follows the LIFO (Last In, First Out) principle?",
-      options: ["Queue", "Stack", "Priority Queue", "Circular Array"],
-      correctAnswer: 1,
+      options: ["Stack", "Queue", "Priority Queue", "Circular Array"],
+      correctAnswer: 0,
       explanation: "A Stack operates on Last-In, First-Out (LIFO) order using push and pop operations."
-    },
-    {
-      question: "In relational databases, which normal form eliminates transitive dependencies?",
-      options: ["1NF", "2NF", "3NF", "BCNF"],
-      correctAnswer: 2,
-      explanation: "Third Normal Form (3NF) requires 2NF plus no non-prime attribute is transitively dependent on any candidate key."
     }
   ]
 };
 
 export const offlineQuiz = {
-  generate: (topic = 'Mathematics', difficulty = 'Medium') => {
+  generate: (topic = 'General Academic', difficulty = 'Medium') => {
     const tLower = (topic || '').toLowerCase();
-    let pool = QUESTION_BANK.mathematics;
+    let pool = null;
 
-    if (tLower.includes('physic') || tLower.includes('wave') || tLower.includes('electric') || tLower.includes('force')) {
+    if (tLower.includes('pythagor') || tLower.includes('triangle') || tLower.includes('geometry') || tLower.includes('hypotenuse')) {
+      pool = QUESTION_BANK.pythagoras;
+    } else if (tLower.includes('space') || tLower.includes('universe') || tLower.includes('astronomy') || tLower.includes('cosmos')) {
+      pool = QUESTION_BANK.space;
+    } else if (tLower.includes('java') || tLower.includes('jvm') || tLower.includes('oop')) {
+      pool = QUESTION_BANK.java;
+    } else if (tLower.includes('python')) {
+      pool = QUESTION_BANK.python;
+    } else if (tLower.includes('physic') || tLower.includes('wave') || tLower.includes('force')) {
       pool = QUESTION_BANK.physics;
     } else if (tLower.includes('computer') || tLower.includes('data') || tLower.includes('code') || tLower.includes('algo')) {
       pool = QUESTION_BANK.computer_science;
+    } else if (tLower.includes('calculus') || tLower.includes('math') || tLower.includes('derivative') || tLower.includes('integral')) {
+      pool = QUESTION_BANK.mathematics;
+    } else {
+      // Dynamic topic question generator for any custom topic
+      const cleanTitle = (topic || 'Academic Subject').replace(/(explain|what is|how does|quiz on)\s*/gi, '').trim().slice(0, 32);
+      pool = [
+        {
+          question: `What is the core conceptual foundation of "${cleanTitle}"?`,
+          options: [
+            `Understanding its defining principles and standard operational frameworks`,
+            `Arbitrary execution of unverified assumptions`,
+            `Complete avoidance of standard industry models`,
+            `Disregarding foundational boundary conditions`
+          ],
+          correctAnswer: 0,
+          explanation: `Comprehensive mastery of ${cleanTitle} requires a firm understanding of its foundational principles and theoretical framework.`
+        },
+        {
+          question: `How are complex challenges in "${cleanTitle}" typically resolved in practice?`,
+          options: [
+            `By decomposing complex problems into modular, verifiable sub-components`,
+            `By trial-and-error without logging or verification`,
+            `By removing all architectural constraints`,
+            `By guessing intermediate variable values`
+          ],
+          correctAnswer: 0,
+          explanation: `Academic and professional methodologies rely on systematic modular decomposition to analyze and solve problems reliably.`
+        },
+        {
+          question: `Why is verification and boundary testing critical in "${cleanTitle}"?`,
+          options: [
+            `To ensure stability, correctness, and adherence to formal specifications`,
+            `To increase computational overhead unnecessarily`,
+            `To bypass security and validation layers`,
+            `It is not necessary in modern workflows`
+          ],
+          correctAnswer: 0,
+          explanation: `Verification ensures results are repeatable, edge cases are accounted for, and solutions remain robust.`
+        }
+      ];
     }
 
     const quiz = {
       id: `offline-quiz-${Date.now()}`,
       _id: `offline-quiz-${Date.now()}`,
+      title: `${topic.slice(0, 36)} (${difficulty} Quiz)`,
       topic: topic || 'Academic Proficiency',
       difficulty: difficulty || 'Medium',
       questions: pool.map(q => ({
         question: q.question,
+        questionText: q.question,
         options: q.options,
         correctAnswer: q.correctAnswer,
+        correctAnswerIndex: q.correctAnswer,
         explanation: q.explanation
       }))
     };
