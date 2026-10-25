@@ -195,8 +195,8 @@ export default function NotesQuizTab({ onOpenQuiz }) {
                     {isPlayingAudio ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
                   </button>
                   <button
-                    onClick={onOpenQuiz}
-                    className="px-3 py-1.5 rounded-xl bg-purple-600 text-white text-xs font-bold flex items-center gap-1"
+                    onClick={() => onOpenQuiz && onOpenQuiz(selectedNote?.title || 'Academic Notes')}
+                    className="px-3 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold flex items-center gap-1 cursor-pointer transition-colors"
                   >
                     <HelpCircle className="w-3.5 h-3.5" />
                     <span>Generate Quiz</span>

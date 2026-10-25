@@ -188,6 +188,7 @@ export default function SolverTab({ onOpenQuiz, savedNotes, setSavedNotes }) {
         const aiMsg = {
           id: c.id,
           sender: 'ai',
+          query: query,
           model: data.isAutoFaqMatch ? 'Auto-FAQ Cache Engine' : 'Gemini AI',
           time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
           type: 'rich-doubt',
@@ -210,6 +211,7 @@ export default function SolverTab({ onOpenQuiz, savedNotes, setSavedNotes }) {
       const fallbackAiMsg = {
         id: `ai-${Date.now()}`,
         sender: 'ai',
+        query: query,
         model: 'StudyGenie AI',
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         type: 'rich-doubt',
@@ -439,11 +441,11 @@ export default function SolverTab({ onOpenQuiz, savedNotes, setSavedNotes }) {
                         </button>
 
                         <button
-                          onClick={onOpenQuiz}
-                          className="flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-xl bg-purple-600/30 border border-purple-400/40 text-purple-200 text-xs sm:text-sm font-semibold hover:bg-purple-600/40 transition-all"
+                          onClick={() => onOpenQuiz && onOpenQuiz(msg.query || msg.title || msg.equationSubtitle || 'General Academic')}
+                          className="flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-xl bg-purple-600/30 border border-purple-400/40 text-purple-200 text-xs sm:text-sm font-semibold hover:bg-purple-600/40 transition-all cursor-pointer"
                         >
                           <HelpCircle className="w-4 h-4 text-purple-300" />
-                          <span>Generate Quiz</span>
+                          <span>Generate Quiz on this Topic</span>
                         </button>
                       </div>
                     </div>

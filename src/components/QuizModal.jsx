@@ -14,26 +14,26 @@ export default function QuizModal({ isOpen, onClose, defaultTopic = "Electromagn
   const [resultData, setResultData] = useState(null);
 
   useEffect(() => {
-    if (isOpen && !currentQuiz) {
-      handleGenerateQuiz();
+    if (isOpen) {
+      const activeTopic = defaultTopic || "General Academic";
+      setTopicInput(activeTopic);
+      fetchQuiz(activeTopic, difficulty);
     }
-  }, [isOpen]);
+  }, [isOpen, defaultTopic]);
 
-  if (!isOpen) return null;
-
-  // FR6 Step 1: Generate Subject-wise MCQs with difficulty level
-  const handleGenerateQuiz = async () => {
+  const fetchQuiz = async (topicToUse, diffToUse = difficulty) => {
     setLoading(true);
     setSubmitted(false);
     setResultData(null);
     setSelectedAnswers({});
+    setCurrentQuiz(null);
 
     try {
       const res = await authFetch(`${API_BASE_URL}/quiz/generate`, {
         method: 'POST',
         body: JSON.stringify({
-          topic: topicInput || 'Physics & Calculus',
-          difficulty: difficulty
+          topic: topicToUse || 'General Academic',
+          difficulty: diffToUse
         })
       });
       const data = await res.json();
@@ -45,6 +45,11 @@ export default function QuizModal({ isOpen, onClose, defaultTopic = "Electromagn
     } finally {
       setLoading(false);
     }
+  };
+
+  // Trigger manual generation from input topic & difficulty selector
+  const handleGenerateQuiz = () => {
+    fetchQuiz(topicInput || defaultTopic || 'General Academic', difficulty);
   };
 
   const handleSelectAnswer = (qIndex, optionIndex) => {
@@ -75,6 +80,8 @@ export default function QuizModal({ isOpen, onClose, defaultTopic = "Electromagn
       setSubmitted(true);
     }
   };
+
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">

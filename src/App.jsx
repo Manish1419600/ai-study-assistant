@@ -24,6 +24,14 @@ function AppContent() {
   const [studyHours, setStudyHours] = useState(0);
   const [savedNotes, setSavedNotes] = useState([]);
   const [refreshKey, setRefreshKey] = useState(0);
+  const [quizTopic, setQuizTopic] = useState('Electromagnetism & Waves');
+
+  const handleOpenQuiz = (topic) => {
+    if (topic && typeof topic === 'string' && topic.trim()) {
+      setQuizTopic(topic.trim());
+    }
+    setIsQuizOpen(true);
+  };
 
   // Apply saved appearance preferences immediately on mount
   useEffect(() => {
@@ -75,7 +83,7 @@ function AppContent() {
             {activeTab === 'solver' && (
               <SolverTab
                 key={`solver-${refreshKey}`}
-                onOpenQuiz={() => setIsQuizOpen(true)}
+                onOpenQuiz={handleOpenQuiz}
                 savedNotes={savedNotes}
                 setSavedNotes={setSavedNotes}
               />
@@ -83,7 +91,7 @@ function AppContent() {
             {activeTab === 'notes' && (
               <NotesQuizTab
                 key={`notes-${refreshKey}`}
-                onOpenQuiz={() => setIsQuizOpen(true)}
+                onOpenQuiz={handleOpenQuiz}
               />
             )}
             {activeTab === 'progress' && (
@@ -102,7 +110,11 @@ function AppContent() {
         <Navigation activeTab={activeTab} setActiveTab={setActiveTab} />
 
         {/* Modals */}
-        <QuizModal isOpen={isQuizOpen} onClose={() => setIsQuizOpen(false)} />
+        <QuizModal
+          isOpen={isQuizOpen}
+          onClose={() => setIsQuizOpen(false)}
+          defaultTopic={quizTopic}
+        />
         <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
 
         {/* Appearance Panel */}
