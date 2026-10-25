@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth, API_BASE_URL } from '../context/AuthContext';
 import { Sparkles, Upload, FileText, CheckCircle2, Volume2, Download, Layers, HelpCircle, VolumeX, Trash2, Loader2 } from 'lucide-react';
+import AIMarkdownRenderer from './AIMarkdownRenderer';
 
 export default function NotesQuizTab({ onOpenQuiz }) {
   const { authFetch, isOnline } = useAuth();
@@ -206,8 +207,8 @@ export default function NotesQuizTab({ onOpenQuiz }) {
               {/* AI Summary View */}
               <div className="space-y-2">
                 <h4 className="text-xs font-bold text-cyan-400 uppercase tracking-wider">Chapter Summary</h4>
-                <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-800 text-xs text-slate-200 leading-relaxed whitespace-pre-line">
-                  {selectedNote.summary}
+                <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-800">
+                  <AIMarkdownRenderer content={selectedNote.summary} className="text-xs text-slate-200 leading-relaxed" />
                 </div>
               </div>
 

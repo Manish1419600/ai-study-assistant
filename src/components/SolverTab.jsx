@@ -21,6 +21,7 @@ import {
   Image as ImageIcon,
   RotateCcw
 } from 'lucide-react';
+import AIMarkdownRenderer, { KaTeXBlock } from './AIMarkdownRenderer';
 
 export default function SolverTab({ onOpenQuiz, savedNotes, setSavedNotes }) {
   const { authFetch, isOnline } = useAuth();
@@ -369,34 +370,30 @@ export default function SolverTab({ onOpenQuiz, savedNotes, setSavedNotes }) {
                     <div className="glass-card p-4 sm:p-6 rounded-2xl border-slate-800 bg-[#0E1424] space-y-4 shadow-xl">
                       {/* LaTeX Mathematical Equation Header */}
                       {msg.equation && (
-                        <div className="math-equation-box text-center space-y-1.5">
-                          <span className="text-xs font-bold text-cyan-400 uppercase tracking-widest block">
+                        <div className="math-equation-box text-center space-y-1.5 p-4 rounded-2xl bg-cyan-500/10 dark:bg-cyan-950/30 border border-cyan-500/30 shadow-md">
+                          <span className="text-xs font-bold text-cyan-600 dark:text-cyan-400 uppercase tracking-widest block mb-1">
                             {msg.title || 'Mathematical Formulation'}
                           </span>
-                          <div className="text-xl sm:text-3xl font-serif text-white font-bold tracking-wider py-2 overflow-x-auto">
-                            {msg.equation}
-                          </div>
+                          <KaTeXBlock math={msg.equation} />
                           {msg.equationSubtitle && (
-                            <p className="text-xs sm:text-sm text-slate-300">{msg.equationSubtitle}</p>
+                            <p className="text-xs sm:text-sm text-slate-400 dark:text-slate-300 mt-1">{msg.equationSubtitle}</p>
                           )}
                         </div>
                       )}
 
-                      {/* Explanation text */}
-                      <div className="text-xs sm:text-base text-slate-100 leading-relaxed whitespace-pre-line font-normal">
-                        {msg.explanation}
-                      </div>
+                      {/* Gemini-Style Rendered Explanation text */}
+                      <AIMarkdownRenderer content={msg.explanation} className="text-slate-100" />
 
                       {/* Key Points */}
                       {msg.keyPoints && msg.keyPoints.length > 0 && (
-                        <div className="space-y-2.5 pt-1">
+                        <div className="space-y-2.5 pt-2">
                           {msg.keyPoints.map((kp, idx) => (
-                            <div key={idx} className="p-3 sm:p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1">
+                            <div key={idx} className="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1">
                               <div className="flex items-center gap-2">
-                                <span className="w-2.5 h-2.5 rounded-full bg-cyan-400"></span>
+                                <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 shrink-0"></span>
                                 <h5 className="text-xs sm:text-sm font-bold text-cyan-300">{kp.title}</h5>
                               </div>
-                              <p className="text-xs sm:text-sm text-slate-200 pl-4.5 leading-relaxed">{kp.text}</p>
+                              <AIMarkdownRenderer content={kp.text} className="text-xs sm:text-sm text-slate-200 pl-4.5" />
                             </div>
                           ))}
                         </div>
